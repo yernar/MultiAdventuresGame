@@ -26,5 +26,22 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
 		float MovingSpeed = 50.f;
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
+		FVector StartLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true, MakeEditWidget = true), Category = MovingComponents)
+		FVector TargetPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true, MakeEditWidget = true), Category = TimelineComponents)
+		class UTimelineComponent* PlatformMovement;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true, MakeEditWidget = true), Category = TimelineComponents)
+		class UCurveFloat* AlphaCurve;
+
+	UFUNCTION()
+		void TimelineFloatReturn(float Value);
+
+	UFUNCTION()
+		void OnTimelineFinished();
+
+	
 	
 };
