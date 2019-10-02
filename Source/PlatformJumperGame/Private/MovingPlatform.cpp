@@ -46,7 +46,7 @@ void AMovingPlatform::BeginPlay()
 		PlatformMovement->SetTimelineLength(TimelineLength);
 		PlatformMovement->SetTimelineLengthMode(ETimelineLengthMode::TL_LastKeyFrame);
 		PlatformMovement->SetPlaybackPosition(0.f, false);
-		PlatformMovement->SetPlayRate(MovingSpeed / 100 * TimelinePlayRate);
+		PlatformMovement->SetPlayRate(MovementSpeed / 100 * TimelinePlayRate);
 
 		PlatformMovement->AddInterpFloat(AlphaCurve, InterpFunction, FName("AlphaValue"));
 		PlatformMovement->SetTimelineFinishedFunc(TimelineFinished);

@@ -25,7 +25,7 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
-		float MovingSpeed = 50.f;
+		float MovementSpeed = 50.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
 		FVector StartLocation;
 	UPROPERTY()
