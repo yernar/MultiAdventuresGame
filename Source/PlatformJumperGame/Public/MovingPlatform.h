@@ -38,12 +38,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = TimelineComponents)
 		class UCurveFloat* AlphaCurve;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = TimelineComponents)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = TimelineComponents)
 		float TimelinePlayRate = 4.f;
 	
 
 	UFUNCTION()
-		void OnTimelineUpdate(float AlphaValue);
+		void OnTimelineUpdate(float Alpha);
 
 	UFUNCTION()
 		void OnTimelineFinished();	

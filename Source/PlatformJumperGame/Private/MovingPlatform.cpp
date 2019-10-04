@@ -30,7 +30,7 @@ void AMovingPlatform::BeginPlay()
 	{	
 		float TimelineLength = 4.f;
 
-		FOnTimelineFloat InterpFunction{}; // Delegate function to be binded with [TimelineFloatReturn] function.
+		FOnTimelineFloat InterpFunction{}; // Delegate function to be binded with [OnTimelineUpdate] function.
 		FOnTimelineEvent TimelineFinished{}; // Delegate function to be binded with [OnTimelineFinished] function.
 
 		InterpFunction.BindUFunction(this, FName("OnTimelineUpdate"));
@@ -48,7 +48,7 @@ void AMovingPlatform::BeginPlay()
 		PlatformMovement->SetPlaybackPosition(0.f, false);
 		PlatformMovement->SetPlayRate(MovementSpeed / 100 * TimelinePlayRate);
 
-		PlatformMovement->AddInterpFloat(AlphaCurve, InterpFunction, FName("AlphaValue"));
+		PlatformMovement->AddInterpFloat(AlphaCurve, InterpFunction, FName("Alpha"));
 		PlatformMovement->SetTimelineFinishedFunc(TimelineFinished);
 		PlatformMovement->SetLooping(false);
 		PlatformMovement->SetIgnoreTimeDilation(true);
@@ -66,9 +66,9 @@ void AMovingPlatform::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AMovingPlatform::OnTimelineUpdate(float AlphaValue)
+void AMovingPlatform::OnTimelineUpdate(float Alpha)
 {	
-	SetActorLocation(FMath::Lerp(StartLocation, EndLocation, AlphaValue));
+	SetActorLocation(FMath::Lerp(StartLocation, EndLocation, Alpha));
 }
 
 void AMovingPlatform::OnTimelineFinished()
