@@ -2,6 +2,7 @@
 
 
 #include "PlatformTrigger.h"
+#include "MovingPlatform.h"
 
 #include "Components/BoxComponent.h"
 
@@ -36,11 +37,27 @@ void APlatformTrigger::Tick(float DeltaTime)
 
 void APlatformTrigger::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	PressurePad->AddLocalOffset(FVector(0.f, 0.f, -10.f));
+	TArray<AActor*> OverlappingActors;
+	GetOverlappingActors(OverlappingActors);
+	if (OverlappingActors.Num() == 1)
+	{
+		for (AMovingPlatform* Platform : PlatformsToTrigger)
+			Platform->AddActiveTrigger();
+
+		PressurePad->AddLocalOffset(FVector(0.f, 0.f, -10.f));
+	}
 }
 
 void APlatformTrigger::OnTriggerEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	PressurePad->AddLocalOffset(FVector(0.f, 0.f, 10.f));
+	TArray<AActor*> OverlappingActors;
+	GetOverlappingActors(OverlappingActors);
+	if (OverlappingActors.Num() == 0)
+	{
+		for (AMovingPlatform* Platform : PlatformsToTrigger)
+			Platform->RemoveActiveTrigger();
+
+		PressurePad->AddLocalOffset(FVector(0.f, 0.f, 10.f));
+	}
 }
 

@@ -21,7 +21,19 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	void AddActiveTrigger();
+	void RemoveActiveTrigger();
 	
+	FORCEINLINE bool IsPlatformActive()
+	{
+		return bIsPlatformActive;
+	}
+
+	FORCEINLINE void SetPlatformActive(bool bIsActive = true)
+	{
+		bIsPlatformActive = bIsActive;
+	}
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
@@ -40,6 +52,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = TimelineComponents)
 		float TimelinePlayRate = 4.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = TriggerComponents)
+		bool bIsPlatformActive = true;
 	
 
 	UFUNCTION()

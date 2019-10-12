@@ -56,14 +56,30 @@ void AMovingPlatform::BeginPlay()
 		
 		StartLocation = GetActorLocation();
 		EndLocation = GetTransform().TransformPosition(TargetPoint);
+		PlatformMovement->Activate();
 
 		PlatformMovement->Play();
+
+		if (!bIsPlatformActive)
+			PlatformMovement->Deactivate();
 	}			
 }
 
 void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AMovingPlatform::AddActiveTrigger()
+{
+	PlatformMovement->Activate();
+	bIsPlatformActive = true;
+}
+
+void AMovingPlatform::RemoveActiveTrigger()
+{
+ 	 PlatformMovement->Deactivate();
+	 bIsPlatformActive = false;
 }
 
 void AMovingPlatform::OnTimelineUpdate(float Alpha)
