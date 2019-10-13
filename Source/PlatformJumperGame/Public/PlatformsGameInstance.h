@@ -24,5 +24,5 @@ private:
 	UFUNCTION(Exec)
 		void HostGame();
 	UFUNCTION(Exec)
-		void JoinGame(const FString& Address);
+		void JoinGame(const FString& Address = "127.0.0.1");
 };
