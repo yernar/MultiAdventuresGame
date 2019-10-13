@@ -72,6 +72,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 void AMovingPlatform::AddActiveTrigger()
 {
+
 	PlatformMovement->Activate();
 	bIsPlatformActive = true;
 }
