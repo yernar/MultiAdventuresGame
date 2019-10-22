@@ -25,4 +25,6 @@ private:
 		void HostGame();
 	UFUNCTION(Exec)
 		void JoinGame(const FString& Address = "127.0.0.1");
+
+	TSubclassOf<class UUserWidget> MenuWidget;
 };

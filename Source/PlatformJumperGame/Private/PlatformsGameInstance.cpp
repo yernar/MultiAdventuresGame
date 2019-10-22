@@ -2,9 +2,14 @@
 
 
 #include "PlatformsGameInstance.h"
+#include "PlatformTrigger.h"
+
+#include "Blueprint/UserWidget.h"
 
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_WIdgetClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
+	MenuWidget = (WBP_WIdgetClass.Class ? WBP_WIdgetClass.Class : nullptr);
 }
 
 void UPlatformsGameInstance::Init()
