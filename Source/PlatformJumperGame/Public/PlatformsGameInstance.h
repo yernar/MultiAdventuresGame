@@ -25,6 +25,9 @@ private:
 		void HostGame();
 	UFUNCTION(Exec)
 		void JoinGame(const FString& Address = "127.0.0.1");
+	UFUNCTION(Exec, BlueprintCallable)
+		void LoadMainMenu();
 
-	TSubclassOf<class UUserWidget> MenuWidget;
+	TSubclassOf<class UUserWidget> MenuClass;
+	UUserWidget* MenuWidget;
 };

@@ -9,7 +9,7 @@
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_WIdgetClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
-	MenuWidget = (WBP_WIdgetClass.Class ? WBP_WIdgetClass.Class : nullptr);
+	MenuClass = (WBP_WIdgetClass.Class ? WBP_WIdgetClass.Class : nullptr);
 }
 
 void UPlatformsGameInstance::Init()
@@ -32,4 +32,12 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 		return;
 	GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 	GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Joining the %s"), *Address));
+}
+
+void UPlatformsGameInstance::LoadMainMenu()
+{
+	MenuWidget = (MenuClass ? CreateWidget<UUserWidget>(this, MenuClass) : nullptr);
+
+	if (MenuWidget)
+		MenuWidget->AddToViewport();
 }
