@@ -39,5 +39,13 @@ void UPlatformsGameInstance::LoadMainMenu()
 	MenuWidget = (MenuClass ? CreateWidget<UUserWidget>(this, MenuClass) : nullptr);
 
 	if (MenuWidget)
+	{
 		MenuWidget->AddToViewport();
+
+		FInputModeUIOnly UIInputMode;
+		UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+
+		GetPrimaryPlayerController()->SetInputMode(UIInputMode);
+		GetPrimaryPlayerController()->bShowMouseCursor = Windows::TRUE;
+	}
 }
