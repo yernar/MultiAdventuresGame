@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "MenuInterface.h"
+
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "PlatformsGameInstance.generated.h"
@@ -10,7 +12,7 @@
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API UPlatformsGameInstance : public UGameInstance
+class PLATFORMJUMPERGAME_API UPlatformsGameInstance : public UGameInstance, public IMenuInterface
 {
 	GENERATED_BODY()
 	
@@ -25,9 +27,11 @@ private:
 		void HostGame();
 	UFUNCTION(Exec)
 		void JoinGame(const FString& Address = "127.0.0.1");
-	UFUNCTION(Exec, BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable)
 		void LoadMainMenu();
 
 	TSubclassOf<class UUserWidget> MenuClass;
-	UUserWidget* MenuWidget;
+
+	class UMainMenu* MenuWidget;
 };

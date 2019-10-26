@@ -3,6 +3,7 @@
 
 #include "PlatformsGameInstance.h"
 #include "PlatformTrigger.h"
+#include "MainMenu.h"
 
 #include "Blueprint/UserWidget.h"
 
@@ -14,12 +15,16 @@ UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectI
 
 void UPlatformsGameInstance::Init()
 {
+
 }
 
 void UPlatformsGameInstance::HostGame()
 {
 	if (!GetEngine())
 		return;
+
+	if (MenuWidget)
+		MenuWidget->TeardownMainMenu();
 
 	GetEngine()->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, TEXT("Hosting"));
 	if (GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen"))
@@ -36,16 +41,12 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 
 void UPlatformsGameInstance::LoadMainMenu()
 {
-	MenuWidget = (MenuClass ? CreateWidget<UUserWidget>(this, MenuClass) : nullptr);
+	MenuWidget = (MenuClass ? CreateWidget<UMainMenu>(this, MenuClass) : nullptr);
 
 	if (MenuWidget)
 	{
-		MenuWidget->AddToViewport();
-
-		FInputModeUIOnly UIInputMode;
-		UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-
-		GetPrimaryPlayerController()->SetInputMode(UIInputMode);
-		GetPrimaryPlayerController()->bShowMouseCursor = Windows::TRUE;
+		MenuWidget->SetMenuInterface(this);
+		MenuWidget->SetupMainMenu();
 	}
+
 }
