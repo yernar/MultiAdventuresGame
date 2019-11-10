@@ -17,7 +17,10 @@ class PLATFORMJUMPERGAME_API UMainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void SetMenuInterface(IMenuInterface* MenuInterface);
+	FORCEINLINE void SetMenuInterface(IMenuInterface* MenuInterface)
+	{
+		this->MenuInterface = MenuInterface;
+	}
 	
 	void SetupMainMenu();
 	void TeardownMainMenu();
@@ -35,6 +38,6 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 		void OnHostButtonClicked();
-
+	
 	IMenuInterface* MenuInterface;
 };

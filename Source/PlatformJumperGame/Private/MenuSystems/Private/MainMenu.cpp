@@ -6,11 +6,6 @@
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
 
-void UMainMenu::SetMenuInterface(IMenuInterface* MenuInterface)
-{
-	this->MenuInterface = MenuInterface;
-}
-
 void UMainMenu::SetupMainMenu()
 {
 	this->AddToViewport();

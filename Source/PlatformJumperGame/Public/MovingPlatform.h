@@ -24,7 +24,7 @@ protected:
 public:
 	void AddActiveTrigger();
 	void RemoveActiveTrigger();
-	
+	// TODO: Move all the inline functions to the end in public section.
 	FORCEINLINE bool IsPlatformActive()
 	{
 		return bIsPlatformActive;
