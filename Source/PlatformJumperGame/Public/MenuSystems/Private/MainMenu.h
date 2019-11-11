@@ -11,17 +11,19 @@
 /**
  * 
  */
+UENUM()
+enum class EMenuTypes : int32
+{
+	MAIN_MENU,
+	JOIN_MENU,
+};
+
 UCLASS()
 class PLATFORMJUMPERGAME_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE void SetMenuInterface(IMenuInterface* MenuInterface)
-	{
-		this->MenuInterface = MenuInterface;
-	}
-	
 	void SetupMainMenu();
 	void TeardownMainMenu();
 
@@ -29,15 +31,47 @@ protected:
 	virtual bool Initialize() override;
 
 private:
+	// ******************************************************* First Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UButton* SoloButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
-		class UButton* HostButton;
+		UButton* HostButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
-		class UButton* JoinButton;
+		UButton* JoinMenuSwitcherButton;
+	// ******************************************************* First Menu Page Components ****************************************************************** //
 
+	// ******************************************************* Second Menu Page Components ****************************************************************** //
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* BackButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* JoinGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		class UEditableTextBox* IPTextBox;
+	// ******************************************************* Second Menu Page Components ****************************************************************** //
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		class UWidgetSwitcher* MenuSwitcher;
+
+	IMenuInterface* MenuInterface;
+
+public:
+	FORCEINLINE void SetMenuInterface(IMenuInterface* MenuInterface)
+	{
+		this->MenuInterface = MenuInterface;
+	}
+
+private:
 	UFUNCTION(BlueprintCallable)
 		void OnHostButtonClicked();
+	UFUNCTION(BlueprintCallable)
+		void OnJoinMenuSwitcherButtonClicked();
+	UFUNCTION(BlueprintCallable)
+		void OnSoloButtonClicked();
+
+	UFUNCTION(BlueprintCallable)
+		void OnBackButtonClicked();
+	UFUNCTION(BlueprintCallable)
+		void OnJoinGameButtonClicked();
 	
-	IMenuInterface* MenuInterface;
+	
 };
