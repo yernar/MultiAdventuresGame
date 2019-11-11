@@ -19,6 +19,11 @@ class PLATFORMJUMPERGAME_API UPlatformsGameInstance : public UGameInstance, publ
 public:
 	UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 
+	UFUNCTION(BlueprintCallable)
+		void LoadMainMenu();
+	UFUNCTION(BlueprintCallable)
+		void LoadGameMenu();
+
 protected:
 	virtual void Init();
 
@@ -27,11 +32,12 @@ private:
 		void HostGame();
 	UFUNCTION(Exec)
 		void JoinGame(const FString& Address = "127.0.0.1");
+	UFUNCTION(Exec)
+		void QuitToMainMenu();	
 
-	UFUNCTION(BlueprintCallable)
-		void LoadMainMenu();
+	TSubclassOf<class UUserWidget> MainMenuClass;
+	TSubclassOf<class UUserWidget> GameMenuClass;
 
-	TSubclassOf<class UUserWidget> MenuClass;
-
-	class UMainMenu* MenuWidget;
+	class UMainMenu* MainMenuWidget;
+	class UGameMenu* GameMenuWidget;
 };

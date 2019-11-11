@@ -33,6 +33,7 @@ bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize())
 		return false;
+
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 	HostButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostButtonClicked);
 	JoinMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinMenuSwitcherButtonClicked);

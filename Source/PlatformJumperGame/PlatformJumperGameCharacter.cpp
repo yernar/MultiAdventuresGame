@@ -1,6 +1,8 @@
 // Copyright (C) 2019 Yernar Aldabergenov. All Rights Reserved.
 
 #include "PlatformJumperGameCharacter.h"
+#include "PlatformsGameInstance.h"
+
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -76,6 +78,9 @@ void APlatformJumperGameCharacter::SetupPlayerInputComponent(class UInputCompone
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &APlatformJumperGameCharacter::OnResetVR);
+
+	// Calling game menu
+	PlayerInputComponent->BindAction("CallGameMenu", IE_Pressed, this, &APlatformJumperGameCharacter::CallGameMenu);
 }
 
 
@@ -133,4 +138,9 @@ void APlatformJumperGameCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void APlatformJumperGameCharacter::CallGameMenu()
+{
+	Cast<UPlatformsGameInstance>(GetGameInstance())->LoadGameMenu();
 }
