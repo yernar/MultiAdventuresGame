@@ -29,15 +29,23 @@ protected:
 
 private:
 	UFUNCTION(Exec)
-		void HostGame();
+		virtual void HostGame() override;
 	UFUNCTION(Exec)
-		void JoinGame(const FString& Address = "127.0.0.1");
+		virtual void JoinGame(const FString& Address = "127.0.0.1") override;
 	UFUNCTION(Exec)
-		void QuitToMainMenu();	
+		virtual void QuitToMainMenu() override;
+	UFUNCTION(Exec)
+		virtual void QuitFromMainMenu() override;
+
+	UFUNCTION(Exec)
+		void GetAuthority();
 
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	TSubclassOf<class UUserWidget> GameMenuClass;
 
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;
+
+	UPROPERTY()
+		class ULocalPlayer* LocalPlayer;
 };

@@ -143,4 +143,5 @@ void APlatformJumperGameCharacter::MoveRight(float Value)
 void APlatformJumperGameCharacter::CallGameMenu()
 {
 	Cast<UPlatformsGameInstance>(GetGameInstance())->LoadGameMenu();
+	TogglePlayerCharacterInput(false);
 }

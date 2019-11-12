@@ -2,6 +2,7 @@
 
 
 #include "GameMenu.h"
+#include "PlatformJumperGameCharacter.h"
 
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
@@ -40,6 +41,8 @@ bool UGameMenu::Initialize()
 void UGameMenu::OnCancelButtonClicked()
 {
 	TeardownGameMenu();
+
+	Cast<APlatformJumperGameCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn())->TogglePlayerCharacterInput(true);
 }
 
 void UGameMenu::OnQuitButtonClicked()

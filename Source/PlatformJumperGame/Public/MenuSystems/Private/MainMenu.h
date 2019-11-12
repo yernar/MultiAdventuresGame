@@ -38,6 +38,9 @@ private:
 		UButton* HostButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinMenuSwitcherButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* QuitFromMainButton;
 	// ******************************************************* First Menu Page Components ****************************************************************** //
 
 	// ******************************************************* Second Menu Page Components ****************************************************************** //
@@ -67,6 +70,8 @@ private:
 		void OnJoinMenuSwitcherButtonClicked();
 	UFUNCTION(BlueprintCallable)
 		void OnSoloButtonClicked();
+	UFUNCTION(BlueprintCallable)
+		void OnQuitFromMainButtonClicked();
 
 	UFUNCTION(BlueprintCallable)
 		void OnBackButtonClicked();

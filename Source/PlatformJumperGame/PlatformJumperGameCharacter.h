@@ -42,7 +42,6 @@ protected:
 
 	/** Calling Game Menu */
 	void CallGameMenu();
-
 	/** 
 	 * Called via input to turn at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
@@ -71,5 +70,10 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	FORCEINLINE void TogglePlayerCharacterInput(bool bIsOn)
+	{
+		(bIsOn ? EnableInput(GetWorld()->GetFirstPlayerController()) : DisableInput(GetWorld()->GetFirstPlayerController()));
+	}
 };
 

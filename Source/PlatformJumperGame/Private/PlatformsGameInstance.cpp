@@ -7,6 +7,8 @@
 #include "GameMenu.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/LocalPlayer.h"
 
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -14,12 +16,12 @@ UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectI
 	MainMenuClass = (WBP_MainMenuClass.Class ? WBP_MainMenuClass.Class : nullptr);
 
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_GameMenuClass(TEXT("/Game/MenuSystem/Widgets/WBP_GameMenu"));
-	GameMenuClass = (WBP_GameMenuClass.Class ? WBP_GameMenuClass.Class : nullptr);
+	GameMenuClass = (WBP_GameMenuClass.Class ? WBP_GameMenuClass.Class : nullptr);	
 }
 
 void UPlatformsGameInstance::Init()
 {
-
+	
 }
 
 void UPlatformsGameInstance::HostGame()
@@ -49,7 +51,12 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 
 void UPlatformsGameInstance::QuitToMainMenu()
 {
-	LoadMainMenu();
+	GetPrimaryPlayerController()->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
+void UPlatformsGameInstance::QuitFromMainMenu()
+{
+	UKismetSystemLibrary::QuitGame(GetWorld(), GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit, true);
 }
 
 void UPlatformsGameInstance::LoadMainMenu()
@@ -72,4 +79,9 @@ void UPlatformsGameInstance::LoadGameMenu()
 		GameMenuWidget->SetMenuInterface(this);
 		GameMenuWidget->SetupGameMenu();
 	}
+}
+
+void UPlatformsGameInstance::GetAuthority()
+{
+	GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Player controllers: \nLocal Player Index:")));
 }

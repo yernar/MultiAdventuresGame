@@ -37,6 +37,7 @@ bool UMainMenu::Initialize()
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 	HostButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostButtonClicked);
 	JoinMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinMenuSwitcherButtonClicked);
+	QuitFromMainButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitFromMainButtonClicked);
 
 	SoloButton->OnClicked.AddDynamic(this, &UMainMenu::OnSoloButtonClicked);
 	BackButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackButtonClicked);
@@ -65,6 +66,11 @@ void UMainMenu::OnSoloButtonClicked()
 	{
 		MenuInterface->HostGame();
 	}
+}
+
+void UMainMenu::OnQuitFromMainButtonClicked()
+{
+	MenuInterface->QuitFromMainMenu();
 }
 
 void UMainMenu::OnBackButtonClicked()
