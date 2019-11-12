@@ -45,7 +45,4 @@ private:
 
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;
-
-	UPROPERTY()
-		class ULocalPlayer* LocalPlayer;
 };

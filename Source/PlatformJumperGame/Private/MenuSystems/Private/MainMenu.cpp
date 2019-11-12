@@ -43,6 +43,8 @@ bool UMainMenu::Initialize()
 	BackButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackButtonClicked);
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameButtonClicked);
 
+	SoloButton->SetIsEnabled(false);
+
 	return true;
 }
 
