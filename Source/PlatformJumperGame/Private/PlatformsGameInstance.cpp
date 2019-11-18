@@ -22,7 +22,10 @@ UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectI
 
 void UPlatformsGameInstance::Init()
 {
-	UE_LOG(LogTemp, Warning, TEXT("It's: %s"), *FString(IOnlineSubsystem::Get() ? "Okay" : "Not okay") )
+	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
+	UE_LOG(LogTemp, Warning, TEXT("It's: %s."), *OSS->GetOnlineServiceName().ToString())
+	IOnlineSessionPtr OSS_Interface = OSS->GetSessionInterface();
+	UE_LOG(LogTemp, Warning, TEXT("Interface is valid: %d."), OSS_Interface.IsValid())
 }
 
 void UPlatformsGameInstance::HostGame()
