@@ -9,6 +9,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Engine/LocalPlayer.h"
+#include "OnlineSubsystem.h"
 
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -21,7 +22,7 @@ UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectI
 
 void UPlatformsGameInstance::Init()
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("It's: %s"), *FString(IOnlineSubsystem::Get() ? "Okay" : "Not okay") )
 }
 
 void UPlatformsGameInstance::HostGame()
