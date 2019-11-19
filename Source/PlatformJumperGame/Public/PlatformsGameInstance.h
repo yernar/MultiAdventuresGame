@@ -3,6 +3,7 @@
 #pragma once
 
 #include "MenuInterface.h"
+#include "OnlineSessionInterface.h"
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
@@ -37,12 +38,15 @@ private:
 	UFUNCTION(Exec)
 		virtual void QuitFromMainMenu() override;
 
-	UFUNCTION(Exec)
-		void GetAuthority();
+	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
 
+	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	TSubclassOf<class UUserWidget> GameMenuClass;
 
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;
+	// ****************************MENU VARS************************ //
+
+	IOnlineSessionPtr OSS_Interface;
 };
