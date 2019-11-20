@@ -39,6 +39,7 @@ private:
 		virtual void QuitFromMainMenu() override;
 
 	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
+	void OnDestroySessionComplete(FName SessionName, bool bSuccess);
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
@@ -49,4 +50,5 @@ private:
 	// ****************************MENU VARS************************ //
 
 	IOnlineSessionPtr OSS_Interface;
+	const static FName SESSION_NAME;
 };

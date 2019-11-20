@@ -12,6 +12,8 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 
+const FName UPlatformsGameInstance::SESSION_NAME = "PLATFORMS";
+
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_MainMenuClass(TEXT("/Game/MenuSystem/Widgets/WBP_MainMenu"));
@@ -52,7 +54,9 @@ void UPlatformsGameInstance::Init()
 
 	if (OSS_Interface.IsValid())
 	{		
+		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
 		OSS_Interface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
+		OSS_Interface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
 	}
 }
 
@@ -60,8 +64,13 @@ void UPlatformsGameInstance::HostGame()
 {
 	if (OSS_Interface.IsValid())
 	{
+		FNamedOnlineSession* OnlineSession = OSS_Interface->GetNamedSession(SESSION_NAME);
+		if (OnlineSession)
+			OSS_Interface->DestroySession(SESSION_NAME);
+
 		FOnlineSessionSettings OSS_Settings;
-		OSS_Interface->CreateSession(0, FName("WTF"), OSS_Settings);
+		OSS_Interface->CreateSession(0, SESSION_NAME, OSS_Settings);
+					
 	}	
 }
 
@@ -80,6 +89,7 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 void UPlatformsGameInstance::QuitToMainMenu()
 {
 	GetPrimaryPlayerController()->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
+	OSS_Interface->DestroySession(SESSION_NAME);
 }
 
 void UPlatformsGameInstance::QuitFromMainMenu()
@@ -100,4 +110,11 @@ void UPlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bSu
 	GetEngine()->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, TEXT("Hosting"));
 	if (GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen"))
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Hosted the session")));
+}
+
+void UPlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bSuccess)
+{
+	(GetEngine() ?
+		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf(TEXT("Session is destroyed")))
+		: GetEngine()->AbortInsideMemberFunction());
 }
