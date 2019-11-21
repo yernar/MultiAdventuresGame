@@ -40,6 +40,7 @@ private:
 
 	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
 	void OnDestroySessionComplete(FName SessionName, bool bSuccess);
+	void OnFindSessionsComplete(bool bSuccess);
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
@@ -49,6 +50,7 @@ private:
 	class UGameMenu* GameMenuWidget;
 	// ****************************MENU VARS************************ //
 
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	IOnlineSessionPtr OSS_Interface;
 	const static FName SESSION_NAME;
 };

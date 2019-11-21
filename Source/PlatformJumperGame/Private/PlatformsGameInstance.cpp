@@ -57,6 +57,12 @@ void UPlatformsGameInstance::Init()
 		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
 		OSS_Interface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
 		OSS_Interface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
+		OSS_Interface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnFindSessionsComplete);
+
+		SessionSearch = MakeShareable(new FOnlineSessionSearch);
+
+		OSS_Interface->FindSessions(0, SessionSearch.ToSharedRef());
+		
 	}
 }
 
@@ -116,5 +122,12 @@ void UPlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bS
 {
 	(GetEngine() ?
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf(TEXT("Session is destroyed")))
+		: GetEngine()->AbortInsideMemberFunction());
+}
+
+void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
+{
+	(GetEngine() ?
+		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Yellow, FString::Printf(TEXT("Session is found")))
 		: GetEngine()->AbortInsideMemberFunction());
 }
