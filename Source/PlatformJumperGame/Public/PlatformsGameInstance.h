@@ -50,7 +50,7 @@ private:
 	class UGameMenu* GameMenuWidget;
 	// ****************************MENU VARS************************ //
 
-	TSharedPtr<FOnlineSessionSearch> SessionSearch;
-	IOnlineSessionPtr OSS_Interface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;	
+	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;
 };

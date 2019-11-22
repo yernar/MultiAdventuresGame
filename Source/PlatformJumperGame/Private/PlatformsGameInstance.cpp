@@ -49,34 +49,38 @@ void UPlatformsGameInstance::Init()
 {
 	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
 	UE_LOG(LogTemp, Warning, TEXT("It's: %s."), *OSS->GetOnlineServiceName().ToString())
-	OSS_Interface = OSS->GetSessionInterface();
-	UE_LOG(LogTemp, Warning, TEXT("Interface is valid: %d."), OSS_Interface.IsValid())
+	SessionInterface = OSS->GetSessionInterface();
+	UE_LOG(LogTemp, Warning, TEXT("Interface is valid: %d."), SessionInterface.IsValid())
 
-	if (OSS_Interface.IsValid())
+	if (SessionInterface.IsValid())
 	{		
 		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
-		OSS_Interface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
-		OSS_Interface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
-		OSS_Interface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnFindSessionsComplete);
+		SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
+		SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
+		SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnFindSessionsComplete);
 
 		SessionSearch = MakeShareable(new FOnlineSessionSearch);
-
-		OSS_Interface->FindSessions(0, SessionSearch.ToSharedRef());
+		SessionSearch->bIsLanQuery = true;
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 		
 	}
 }
 
 void UPlatformsGameInstance::HostGame()
 {
-	if (OSS_Interface.IsValid())
+	if (SessionInterface.IsValid())
 	{
-		FNamedOnlineSession* OnlineSession = OSS_Interface->GetNamedSession(SESSION_NAME);
-		if (OnlineSession)
-			OSS_Interface->DestroySession(SESSION_NAME);
+		FNamedOnlineSession* OnlineSession = SessionInterface->GetNamedSession(SESSION_NAME);
 
-		FOnlineSessionSettings OSS_Settings;
-		OSS_Interface->CreateSession(0, SESSION_NAME, OSS_Settings);
-					
+		if (OnlineSession)
+			SessionInterface->DestroySession(SESSION_NAME);
+
+		FOnlineSessionSettings SessionSettings;
+		SessionSettings.bIsLANMatch = true;
+		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.bShouldAdvertise = true;
+
+		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);					
 	}	
 }
 
@@ -95,7 +99,7 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 void UPlatformsGameInstance::QuitToMainMenu()
 {
 	GetPrimaryPlayerController()->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
-	OSS_Interface->DestroySession(SESSION_NAME);
+	SessionInterface->DestroySession(SESSION_NAME);
 }
 
 void UPlatformsGameInstance::QuitFromMainMenu()
@@ -127,7 +131,12 @@ void UPlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bS
 
 void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 {
-	(GetEngine() ?
-		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Yellow, FString::Printf(TEXT("Session is found")))
-		: GetEngine()->AbortInsideMemberFunction());
+	if (bSuccess && SessionSearch.IsValid())
+	{
+		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf( TEXT("Finished searching for sessions") ));
+		for (const auto& Session : SessionSearch->SearchResults)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Session is found: %s"), *Session.GetSessionIdStr());
+		}
+	}
 }
