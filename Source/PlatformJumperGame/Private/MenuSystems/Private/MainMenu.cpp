@@ -2,11 +2,18 @@
 
 
 #include "MainMenu.h"
+#include "ServerRow.h"
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
 #include "Blueprint/UserWidget.h"
+
+UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_ServerRowClass(TEXT("/Game/MenuSystem/Widgets/WBP_ServerRow"));
+	ServerRowClass = (WBP_ServerRowClass.Class ? WBP_ServerRowClass.Class : nullptr);
+}
 
 void UMainMenu::SetupMainMenu()
 {
@@ -77,7 +84,7 @@ void UMainMenu::OnQuitFromMainButtonClicked()
 
 void UMainMenu::OnBackButtonClicked()
 {	
-	IPTextBox->SetText(FText());
+	// IPTextBox->SetText(FText());
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 }
 
@@ -85,6 +92,8 @@ void UMainMenu::OnJoinGameButtonClicked()
 {
 	if (MenuInterface)
 	{
-		MenuInterface->JoinGame(IPTextBox->GetText().ToString());
+		ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(this, ServerRowClass) : nullptr);
+		ServerList->AddChild(ServerRowWidget);
+		// MenuInterface->JoinGame(IPTextBox->GetText().ToString());
 	}
 }

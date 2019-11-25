@@ -24,6 +24,8 @@ class PLATFORMJUMPERGAME_API UMainMenu : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UMainMenu(const FObjectInitializer& ObjectInitializer);
+
 	void SetupMainMenu();
 	void TeardownMainMenu();
 
@@ -48,8 +50,8 @@ private:
 		UButton* BackButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinGameButton;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
-		class UEditableTextBox* IPTextBox;
+	 UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
+		class UPanelWidget* ServerList;
 	// ******************************************************* Second Menu Page Components ****************************************************************** //
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
@@ -57,10 +59,14 @@ private:
 
 	IMenuInterface* MenuInterface;
 
+	TSubclassOf<class UServerRow> ServerRowClass;
+
+	UServerRow* ServerRowWidget;
+
 public:
-	FORCEINLINE void SetMenuInterface(IMenuInterface* MenuInterface)
+	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface)
 	{
-		this->MenuInterface = MenuInterface;
+		MenuInterface = Interface;
 	}
 
 private:
