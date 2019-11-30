@@ -90,7 +90,7 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 		return;
 
 	if (MainMenuWidget)
-		MainMenuWidget->AddServers({ "WTF", "HTF", "GG", "SMTP" });
+		RefreshServers();
 		// MainMenuWidget->TeardownMainMenu();
 
 	/*GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
@@ -106,6 +106,14 @@ void UPlatformsGameInstance::QuitToMainMenu()
 void UPlatformsGameInstance::QuitFromMainMenu()
 {
 	UKismetSystemLibrary::QuitGame(GetWorld(), GetWorld()->GetFirstPlayerController(), EQuitPreference::Quit, true);
+}
+
+void UPlatformsGameInstance::RefreshServers()
+{
+	if (SessionInterface.IsValid())
+	{
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
 }
 
 void UPlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bSuccess)
@@ -132,12 +140,16 @@ void UPlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bS
 
 void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 {
+	// TODO: Needs <Refactoring>
 	if (bSuccess && SessionSearch.IsValid())
 	{
+		TArray<FString> Servers;
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf( TEXT("Finished searching for sessions") ));
 		for (const auto& Session : SessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Session is found: %s"), *Session.GetSessionIdStr());
+			Servers.Add(*Session.GetSessionIdStr());
 		}
+		MainMenuWidget->AddServers(Servers);
 	}
 }

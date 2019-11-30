@@ -37,6 +37,8 @@ private:
 		virtual void QuitToMainMenu() override;
 	UFUNCTION(Exec)
 		virtual void QuitFromMainMenu() override;
+	UFUNCTION(Exec)
+		virtual void RefreshServers() override;
 
 	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
 	void OnDestroySessionComplete(FName SessionName, bool bSuccess);
