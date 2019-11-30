@@ -90,10 +90,11 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 		return;
 
 	if (MainMenuWidget)
-		MainMenuWidget->TeardownMainMenu();
+		MainMenuWidget->AddServers({ "WTF", "HTF", "GG", "SMTP" });
+		// MainMenuWidget->TeardownMainMenu();
 
-	GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-	GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Joining the %s"), *Address));
+	/*GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Joining the %s"), *Address));*/
 }
 
 void UPlatformsGameInstance::QuitToMainMenu()

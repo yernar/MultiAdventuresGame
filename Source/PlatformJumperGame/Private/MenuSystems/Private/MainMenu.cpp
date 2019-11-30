@@ -8,6 +8,7 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -35,6 +36,20 @@ void UMainMenu::TeardownMainMenu()
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(GameInputMode);
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::FALSE;
+}
+
+void UMainMenu::AddServers(TArray<FString> ServerNames)
+{
+	if (GetMenuInterface())
+	{
+		for (const FString& Name : ServerNames)
+		{
+			ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(GetWorld(), ServerRowClass) : nullptr);
+			ServerRowWidget->SetServerText(Name);
+			ServerList->AddChild(ServerRowWidget);
+			// TODO: After joining a game, delete all these widgets
+		}		
+	}
 }
 
 bool UMainMenu::Initialize()
@@ -95,9 +110,7 @@ void UMainMenu::OnBackButtonClicked()
 void UMainMenu::OnJoinGameButtonClicked()
 {
 	if (GetMenuInterface())
-	{
-		ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(this, ServerRowClass) : nullptr);
-		ServerList->AddChild(ServerRowWidget);
-		// MenuInterface->JoinGame(IPTextBox->GetText().ToString());
+	{		
+		MenuInterface->JoinGame(""/*IPTextBox->GetText().ToString()*/);
 	}
 }

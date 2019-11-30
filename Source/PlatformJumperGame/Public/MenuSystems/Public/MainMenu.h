@@ -27,6 +27,8 @@ public:
 	void SetupMainMenu();
 	void TeardownMainMenu();
 
+	void AddServers(TArray<FString> ServerNames);
+
 protected:
 	virtual bool Initialize() override;
 
