@@ -3,6 +3,7 @@
 
 #include "MainMenu.h"
 #include "ServerRow.h"
+#include "MenuInterface.h"
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
@@ -57,7 +58,7 @@ bool UMainMenu::Initialize()
 
 void UMainMenu::OnHostButtonClicked()
 {
-	if (MenuInterface)
+	if (GetMenuInterface())
 	{
 		MenuInterface->HostGame();
 	}
@@ -71,7 +72,7 @@ void UMainMenu::OnJoinMenuSwitcherButtonClicked()
 void UMainMenu::OnSoloButtonClicked()
 {
 	// TODO: Make a solo game mode & function related with solo gameplay.
-	if (MenuInterface)
+	if (GetMenuInterface())
 	{
 		MenuInterface->HostGame();
 	}
@@ -79,7 +80,10 @@ void UMainMenu::OnSoloButtonClicked()
 
 void UMainMenu::OnQuitFromMainButtonClicked()
 {
-	MenuInterface->QuitFromMainMenu();
+	if (GetMenuInterface())
+	{
+		MenuInterface->QuitFromMainMenu();
+	}
 }
 
 void UMainMenu::OnBackButtonClicked()
@@ -90,7 +94,7 @@ void UMainMenu::OnBackButtonClicked()
 
 void UMainMenu::OnJoinGameButtonClicked()
 {
-	if (MenuInterface)
+	if (GetMenuInterface())
 	{
 		ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(this, ServerRowClass) : nullptr);
 		ServerList->AddChild(ServerRowWidget);

@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "MenuInterface.h"
-
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "MainMenu.generated.h"
@@ -57,17 +55,15 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UWidgetSwitcher* MenuSwitcher;
 
-	IMenuInterface* MenuInterface;
+	class IMenuInterface* MenuInterface;
 
 	TSubclassOf<class UServerRow> ServerRowClass;
 
 	UServerRow* ServerRowWidget;
 
 public:
-	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface)
-	{
-		MenuInterface = Interface;
-	}
+	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
+	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
 
 private:
 	UFUNCTION(BlueprintCallable)
