@@ -29,6 +29,8 @@ public:
 
 	void AddServers(TArray<FString> ServerNames);
 
+	void SelectIndex(uint32 Index);
+
 protected:
 	virtual bool Initialize() override;
 
@@ -50,7 +52,7 @@ private:
 		UButton* BackButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinGameButton;
-	 UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
 		class UPanelWidget* ServerList;
 	// ******************************************************* Second Menu Page Components ****************************************************************** //
 
@@ -60,6 +62,8 @@ private:
 	class IMenuInterface* MenuInterface;
 
 	TSubclassOf<class UServerRow> ServerRowClass;
+
+	TOptional<uint32> SelectedIndex;
 
 	UServerRow* ServerRowWidget;
 
@@ -80,7 +84,5 @@ private:
 	UFUNCTION(BlueprintCallable)
 		void OnBackButtonClicked();
 	UFUNCTION(BlueprintCallable)
-		void OnJoinGameButtonClicked();
-	
-	
+		void OnJoinGameButtonClicked();	
 };

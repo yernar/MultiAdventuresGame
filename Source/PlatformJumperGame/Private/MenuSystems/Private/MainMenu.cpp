@@ -42,14 +42,21 @@ void UMainMenu::AddServers(TArray<FString> ServerNames)
 {
 	if (GetMenuInterface())
 	{
-		for (const FString& Name : ServerNames)
+		for (int32 i = 0; i < ServerNames.Num(); ++i)
 		{
 			ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(GetWorld(), ServerRowClass) : nullptr);
-			ServerRowWidget->SetServerText(Name);
+			ServerRowWidget->SetServerText(ServerNames[i]);
+			ServerRowWidget->Setup(this, i);
 			ServerList->AddChild(ServerRowWidget);
 			// TODO: After joining a game, delete all these widgets
 		}		
 	}
+}
+
+// make FORCEINLINE
+void UMainMenu::SelectIndex(uint32 Index)
+{
+	SelectedIndex = Index; 
 }
 
 bool UMainMenu::Initialize()
@@ -65,7 +72,6 @@ bool UMainMenu::Initialize()
 	SoloButton->OnClicked.AddDynamic(this, &UMainMenu::OnSoloButtonClicked);
 	BackButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackButtonClicked);
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameButtonClicked);
-
 	SoloButton->SetIsEnabled(false);
 
 	return true;
@@ -109,8 +115,19 @@ void UMainMenu::OnBackButtonClicked()
 
 void UMainMenu::OnJoinGameButtonClicked()
 {
+	if (SelectedIndex.IsSet())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX: %d"), SelectedIndex.GetValue())
+	}
+
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX:ERROR"))
+	}
+
 	if (GetMenuInterface())
 	{		
+		AddServers({"SAP", "WTF"});
 		MenuInterface->JoinGame(""/*IPTextBox->GetText().ToString()*/);
 	}
 }

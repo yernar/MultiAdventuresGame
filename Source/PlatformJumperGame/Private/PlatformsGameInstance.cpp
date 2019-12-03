@@ -90,7 +90,8 @@ void UPlatformsGameInstance::JoinGame(const FString& Address)
 		return;
 
 	if (MainMenuWidget)
-		RefreshServers();
+	{
+	}//RefreshServers();
 		// MainMenuWidget->TeardownMainMenu();
 
 	/*GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
