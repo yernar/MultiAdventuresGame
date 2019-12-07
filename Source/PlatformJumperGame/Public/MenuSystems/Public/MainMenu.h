@@ -29,8 +29,6 @@ public:
 
 	void AddServers(TArray<FString> ServerNames);
 
-	void SelectIndex(uint32 Index);
-
 protected:
 	virtual bool Initialize() override;
 
@@ -70,6 +68,7 @@ private:
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
 	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
+	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
 
 private:
 	UFUNCTION(BlueprintCallable)

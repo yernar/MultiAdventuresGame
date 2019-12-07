@@ -53,12 +53,6 @@ void UMainMenu::AddServers(TArray<FString> ServerNames)
 	}
 }
 
-// make FORCEINLINE
-void UMainMenu::SelectIndex(uint32 Index)
-{
-	SelectedIndex = Index; 
-}
-
 bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize())
