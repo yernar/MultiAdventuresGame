@@ -53,19 +53,11 @@ void UMainMenu::AddServers(TArray<FString> ServerNames)
 	}
 }
 
-const UServerRow * UMainMenu::GetSelectedServer() const
+const UServerRow* UMainMenu::GetSelectedServer() const
 {
-	if (SelectedIndex.IsSet())
-	{
-		ServerList->GetChildAt(SelectedIndex.GetValue());
-	}
-	return nullptr;
-}
-
-void UMainMenu::Tick(FGeometry MyGeometry, float InDeltaTime)
-{
-	Super::Tick(MyGeometry, InDeltaTime);
-	
+	return ( SelectedIndex.IsSet() ?
+		Cast<UServerRow> (ServerList->GetChildAt(SelectedIndex.GetValue())) :
+		nullptr );
 }
 
 bool UMainMenu::Initialize()
@@ -117,17 +109,15 @@ void UMainMenu::OnQuitFromMainButtonClicked()
 }
 
 void UMainMenu::OnBackButtonClicked()
-{	
+{
+	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 	ServerList->ClearChildren();
-	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());
-	// IPTextBox->SetText(FText());
-	//MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 }
 
 void UMainMenu::OnJoinGameButtonClicked()
 {
-	AddServers({ "SAP", "WTF" });
-	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());
+	/*AddServers({ "SAP", "WTF" });
+	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());*/
 	if (SelectedIndex.IsSet() && GetMenuInterface())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX: %d"), SelectedIndex.GetValue());

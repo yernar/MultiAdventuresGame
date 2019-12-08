@@ -5,6 +5,7 @@
 #include "PlatformTrigger.h"
 #include "MainMenu.h"
 #include "GameMenu.h"
+#include "ServerRow.h"
 
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -58,6 +59,7 @@ void UPlatformsGameInstance::Init()
 		SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
 		SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
 		SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnFindSessionsComplete);
+		SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnJoinSessionComplete);
 
 		SessionSearch = MakeShareable(new FOnlineSessionSearch);
 		SessionSearch->bIsLanQuery = true;
@@ -91,7 +93,8 @@ void UPlatformsGameInstance::JoinGame(uint32 ServerIndex)
 	{
 		MainMenuWidget->TeardownMainMenu();
 
-		SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[ServerIndex]);
+		SessionInterface->JoinSession(0, FName(*MainMenuWidget->GetSelectedServer()->GetServerText()), SessionSearch->SearchResults[ServerIndex]);
+		
 	}
 	//RefreshServers();
 		// MainMenuWidget->TeardownMainMenu();
@@ -159,5 +162,32 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 
 void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult)
 {
+	FString Address;
+	SessionInterface->GetResolvedConnectString(SessionName, Address);
 
+	switch (JoinSessionCompleteResult)
+	{
+		case EOnJoinSessionCompleteResult::Success:
+			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			break;
+		case EOnJoinSessionCompleteResult::SessionIsFull:
+			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			break;
+		case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			break;
+		case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			break;
+		case EOnJoinSessionCompleteResult::AlreadyInSession:
+			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			break;
+		case EOnJoinSessionCompleteResult::UnknownError:
+			UE_LOG(LogTemp, Warning, TEXT("UnknownError"))
+			break;
+		default:
+			break;
+	}
+
+	GetFirstLocalPlayerController(GetWorld())->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }

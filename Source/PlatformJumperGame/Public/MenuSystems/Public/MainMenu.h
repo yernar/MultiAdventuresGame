@@ -30,8 +30,6 @@ public:
 	void AddServers(TArray<FString> ServerNames);
 	const class UServerRow* GetSelectedServer() const;
 
-	void Tick(FGeometry MyGeometry, float InDeltaTime);
-
 protected:
 	virtual bool Initialize() override;
 
