@@ -19,6 +19,7 @@ protected:
 
 public:
 	void SetServerText(const FString& Text = "Unknown");
+	const FString& GetServerText() const;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerProps)
@@ -33,7 +34,7 @@ private:
 
 public:
 	FORCEINLINE void SetServerName(UTextBlock* Server) { ServerName = Server; }
-	FORCEINLINE class UTextBlock* GetServerName() { return ServerName; }
+	FORCEINLINE class UTextBlock* GetServerName() const { return ServerName; }
 
 	FORCEINLINE void Setup(UMainMenu * Parent, uint32 Index)
 	{

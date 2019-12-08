@@ -3,7 +3,7 @@
 #pragma once
 
 #include "MenuInterface.h"
-#include "OnlineSessionInterface.h"
+#include "OnlineSessionInterface.h" // consider removing this include
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
@@ -32,7 +32,7 @@ private:
 	UFUNCTION(Exec)
 		virtual void HostGame() override;
 	UFUNCTION(Exec)
-		virtual void JoinGame(const FString& Address = "127.0.0.1") override;
+		virtual void JoinGame(uint32 ServerIndex) override;
 	UFUNCTION(Exec)
 		virtual void QuitToMainMenu() override;
 	UFUNCTION(Exec)
@@ -40,9 +40,11 @@ private:
 	UFUNCTION(Exec)
 		virtual void RefreshServers() override;
 
+	// **************************** DELEGATES ************************ // 
 	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
 	void OnDestroySessionComplete(FName SessionName, bool bSuccess);
 	void OnFindSessionsComplete(bool bSuccess);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult);
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;

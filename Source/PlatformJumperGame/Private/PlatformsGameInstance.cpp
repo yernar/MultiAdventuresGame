@@ -84,14 +84,16 @@ void UPlatformsGameInstance::HostGame()
 	}	
 }
 
-void UPlatformsGameInstance::JoinGame(const FString& Address)
+void UPlatformsGameInstance::JoinGame(uint32 ServerIndex)
 {
-	if (!GetEngine())
-		return;
 
-	if (MainMenuWidget)
+	if (MainMenuWidget && SessionInterface.IsValid() && SessionSearch.IsValid())
 	{
-	}//RefreshServers();
+		MainMenuWidget->TeardownMainMenu();
+
+		SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[ServerIndex]);
+	}
+	//RefreshServers();
 		// MainMenuWidget->TeardownMainMenu();
 
 	/*GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
@@ -153,4 +155,9 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 		}
 		MainMenuWidget->AddServers(Servers);
 	}
+}
+
+void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult)
+{
+
 }

@@ -28,6 +28,9 @@ public:
 	void TeardownMainMenu();
 
 	void AddServers(TArray<FString> ServerNames);
+	const class UServerRow* GetSelectedServer() const;
+
+	void Tick(FGeometry MyGeometry, float InDeltaTime);
 
 protected:
 	virtual bool Initialize() override;
@@ -59,7 +62,7 @@ private:
 
 	class IMenuInterface* MenuInterface;
 
-	TSubclassOf<class UServerRow> ServerRowClass;
+	TSubclassOf<UServerRow> ServerRowClass;
 
 	TOptional<uint32> SelectedIndex;
 
