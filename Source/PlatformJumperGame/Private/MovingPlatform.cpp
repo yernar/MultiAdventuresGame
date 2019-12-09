@@ -72,15 +72,22 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 void AMovingPlatform::AddActiveTrigger()
 {
-
-	PlatformMovement->Activate();
-	bIsPlatformActive = true;
+	++TriggeredNum;
+	if (TriggeredNum)
+	{
+		PlatformMovement->Activate();
+		bIsPlatformActive = true;
+	}
 }
 
 void AMovingPlatform::RemoveActiveTrigger()
 {
- 	 PlatformMovement->Deactivate();
-	 bIsPlatformActive = false;
+	 --TriggeredNum;
+	 if (!TriggeredNum)
+	 {
+		 PlatformMovement->Deactivate();
+		 bIsPlatformActive = false;
+	 }
 }
 
 void AMovingPlatform::OnTimelineUpdate(float Alpha)

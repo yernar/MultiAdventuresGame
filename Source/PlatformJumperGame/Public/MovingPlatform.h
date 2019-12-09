@@ -23,17 +23,7 @@ protected:
 
 public:
 	void AddActiveTrigger();
-	void RemoveActiveTrigger();
-	// TODO: Move all the inline functions to the end in public section.
-	FORCEINLINE bool IsPlatformActive()
-	{
-		return bIsPlatformActive;
-	}
-
-	FORCEINLINE void SetPlatformActive(bool bIsActive = true)
-	{
-		bIsPlatformActive = bIsActive;
-	}
+	void RemoveActiveTrigger();	
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true), Category = MovingComponents)
@@ -62,4 +52,11 @@ private:
 
 	UFUNCTION()
 		void OnTimelineFinished();	
+
+public:
+	FORCEINLINE bool IsPlatformActive() { return bIsPlatformActive; }
+	FORCEINLINE void SetPlatformActive(bool bIsActive = true) { bIsPlatformActive = bIsActive; }
+
+private:
+	uint32 TriggeredNum = 0;
 };
