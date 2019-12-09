@@ -62,7 +62,9 @@ void UPlatformsGameInstance::Init()
 		SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnJoinSessionComplete);
 
 		SessionSearch = MakeShareable(new FOnlineSessionSearch);
-		SessionSearch->bIsLanQuery = true;
+		SessionSearch->MaxSearchResults = 100;
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		// SessionSearch->bIsLanQuery = true;
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 		
 	}
@@ -78,9 +80,10 @@ void UPlatformsGameInstance::HostGame()
 			SessionInterface->DestroySession(SESSION_NAME);
 
 		FOnlineSessionSettings SessionSettings;
-		SessionSettings.bIsLANMatch = true;
+		SessionSettings.bIsLANMatch = false;
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
+		SessionSettings.bUsesPresence = true;
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);					
 	}	
@@ -162,8 +165,8 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 
 void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult)
 {
-	FString Address;
-	SessionInterface->GetResolvedConnectString(SessionName, Address);
+	FString ResolvedURL;
+	SessionInterface->GetResolvedConnectString(SessionName, ResolvedURL);
 
 	switch (JoinSessionCompleteResult)
 	{
@@ -189,5 +192,5 @@ void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSes
 			break;
 	}
 
-	GetFirstLocalPlayerController(GetWorld())->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+	GetFirstLocalPlayerController(GetWorld())->ClientTravel(ResolvedURL, ETravelType::TRAVEL_Absolute);
 }
