@@ -40,6 +40,7 @@ public:
 	{
 		ParentMenu = Parent;
 		this->Index = Index;
+		SetServerText("Server " + FString::FromInt(Index));
 	}
 
 private:
