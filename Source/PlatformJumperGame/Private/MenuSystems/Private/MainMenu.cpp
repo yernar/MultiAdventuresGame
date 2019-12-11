@@ -7,8 +7,8 @@
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
-#include "Components/TextBlock.h"
-#include "Blueprint/UserWidget.h"
+
+const uint32 UMainMenu::UnselectedIndex = 667;
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

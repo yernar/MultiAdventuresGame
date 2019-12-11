@@ -32,6 +32,8 @@ public:
 
 	void UpdateSelectedServerColor();
 
+	static const uint32 UnselectedIndex;
+
 protected:
 	virtual bool Initialize() override;
 
@@ -71,7 +73,7 @@ private:
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
 	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
-	FORCEINLINE uint32 GetSelectedIndex() { return (SelectedIndex.IsSet() ? SelectedIndex.GetValue() : 0); }
+	FORCEINLINE uint32 GetSelectedIndex() { return (SelectedIndex.IsSet() ? SelectedIndex.GetValue() : UnselectedIndex); }
 	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
 
 private:
