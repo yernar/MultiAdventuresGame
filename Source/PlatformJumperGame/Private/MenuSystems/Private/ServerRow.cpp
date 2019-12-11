@@ -7,6 +7,8 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 
+const FLinearColor UServerRow::DefaultTextColor = FLinearColor::White;
+
 bool UServerRow::Initialize()
 {
 	if (!Super::Initialize())
@@ -31,18 +33,20 @@ const FString& UServerRow::GetServerText() const
 
 void UServerRow::OnSelected()
 {
-	ServerName->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
-	NumPlayers->SetColorAndOpacity(FSlateColor(FLinearColor::Green));
+	UpdateTextColor(ServerName, FLinearColor::Green);
+	UpdateTextColor(NumPlayers, FLinearColor::Green);
 }
 
 void UServerRow::OnUnselected()
 {
-	OnUnhovored();
+	SetTextDefaultColor(ServerName);
+	SetTextDefaultColor(NumPlayers);
 }
 
 void UServerRow::OnClicked()
 {
 	ParentMenu->SelectIndex(Index);
+
 	ParentMenu->UpdateSelectedServerColor();
 }
 
@@ -50,8 +54,8 @@ void UServerRow::OnHovered()
 {
 	if (Index != ParentMenu->GetSelectedIndex())
 	{
-		ServerName->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
-		NumPlayers->SetColorAndOpacity(FSlateColor(FLinearColor::Yellow));
+		UpdateTextColor(ServerName, FLinearColor::Yellow);
+		UpdateTextColor(NumPlayers, FLinearColor::Yellow);
 	}
 }
 
@@ -59,7 +63,17 @@ void UServerRow::OnUnhovored()
 {
 	if (Index != ParentMenu->GetSelectedIndex())
 	{
-		ServerName->SetColorAndOpacity(FSlateColor(FLinearColor::White));
-		NumPlayers->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+		SetTextDefaultColor(ServerName);
+		SetTextDefaultColor(NumPlayers);
 	}
+}
+
+void UServerRow::UpdateTextColor(UTextBlock* TextBlock, const FLinearColor& Color)
+{
+	TextBlock->SetColorAndOpacity(FSlateColor(Color));
+}
+
+void UServerRow::SetTextDefaultColor(UTextBlock* TextBlock)
+{
+	TextBlock->SetColorAndOpacity(FSlateColor(DefaultTextColor));
 }

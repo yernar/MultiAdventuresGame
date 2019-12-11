@@ -37,12 +37,14 @@ private:
 	
 	uint32 Index;	// Index of Currrent ServerRow in {MainMenu => ServerList}
 
+	static const FLinearColor DefaultTextColor;
+
 public:
 	FORCEINLINE void SetServerName(UTextBlock* Server) { ServerName = Server; }
 	FORCEINLINE class UTextBlock* GetServerName() const { return ServerName; }
 	
 
-	FORCEINLINE void Setup(UMainMenu * Parent, uint32 Index)
+	FORCEINLINE void Setup(UMainMenu* Parent, uint32 Index)
 	{
 		ParentMenu = Parent;
 		this->Index = Index;
@@ -58,4 +60,7 @@ private:
 		void OnHovered();
 	UFUNCTION(BlueprintCallable)
 		void OnUnhovored();
+
+	void UpdateTextColor(class UTextBlock* TextBlock, const FLinearColor& Color);
+	void SetTextDefaultColor(class UTextBlock* TextBlock);
 };
