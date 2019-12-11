@@ -7,7 +7,6 @@
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
-#include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
 
@@ -25,7 +24,7 @@ void UMainMenu::SetupMainMenu()
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::TRUE;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::TRUE;	
 }
 
 void UMainMenu::TeardownMainMenu()
@@ -60,6 +59,19 @@ const UServerRow* UMainMenu::GetSelectedServer() const
 		nullptr );
 }
 
+void UMainMenu::UpdateSelectedServerColor()
+{
+	for (auto* Server : ServerList->GetAllChildren())
+	{
+		UServerRow* ServerRow = Cast<UServerRow>(Server);
+		if (SelectedIndex.GetValue() == ServerRow->GetIndex())
+			ServerRow->OnSelected();
+		else
+			ServerRow->OnUnselected();
+
+	}
+}
+
 bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize())
@@ -89,6 +101,7 @@ void UMainMenu::OnHostButtonClicked()
 void UMainMenu::OnJoinMenuSwitcherButtonClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::JOIN_MENU));
+	AddServers({ "Jacking Ton", "Pharma Boy", "Slacks Blacks" });
 }
 
 void UMainMenu::OnSoloButtonClicked()

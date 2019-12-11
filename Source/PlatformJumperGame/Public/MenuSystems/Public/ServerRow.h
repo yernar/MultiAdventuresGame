@@ -21,10 +21,15 @@ public:
 	void SetServerText(const FString& Text = "Unknown");
 	const FString& GetServerText() const;
 
+	void OnSelected();
+	void OnUnselected();
+
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerProps)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		class UTextBlock* ServerName;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerProps)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
+		class UTextBlock* NumPlayers;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		class UButton* RowButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = MenuProps)
@@ -35,6 +40,7 @@ private:
 public:
 	FORCEINLINE void SetServerName(UTextBlock* Server) { ServerName = Server; }
 	FORCEINLINE class UTextBlock* GetServerName() const { return ServerName; }
+	
 
 	FORCEINLINE void Setup(UMainMenu * Parent, uint32 Index)
 	{
@@ -43,7 +49,13 @@ public:
 		SetServerText("Server " + FString::FromInt(Index));
 	}
 
+	FORCEINLINE uint32 GetIndex() { return Index; }
+
 private:
 	UFUNCTION(BlueprintCallable)
 		void OnClicked();
+	UFUNCTION(BlueprintCallable)
+		void OnHovered();
+	UFUNCTION(BlueprintCallable)
+		void OnUnhovored();
 };

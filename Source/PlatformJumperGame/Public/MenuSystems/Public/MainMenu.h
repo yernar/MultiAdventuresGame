@@ -30,6 +30,8 @@ public:
 	void AddServers(TArray<FString> ServerNames);
 	const class UServerRow* GetSelectedServer() const;
 
+	void UpdateSelectedServerColor();
+
 protected:
 	virtual bool Initialize() override;
 
@@ -69,6 +71,7 @@ private:
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
 	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
+	FORCEINLINE uint32 GetSelectedIndex() { return (SelectedIndex.IsSet() ? SelectedIndex.GetValue() : 0); }
 	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
 
 private:
