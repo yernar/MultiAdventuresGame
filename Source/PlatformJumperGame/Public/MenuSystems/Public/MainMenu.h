@@ -27,7 +27,7 @@ public:
 	void SetupMainMenu();
 	void TeardownMainMenu();
 
-	void AddServers(TArray<FString> ServerNames);
+	void AddServers(TArray<struct FServerProperty> ServerNames);
 	const class UServerRow* GetSelectedServer() const;
 
 	void UpdateSelectedServerColor();

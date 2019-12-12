@@ -9,6 +9,17 @@
 /**
  * 
  */
+USTRUCT()
+struct FServerProperty
+{
+	GENERATED_BODY()
+
+	FString Name;
+	FString HostedUsername;
+	uint32 CurrentPlayers;
+	uint32 MaxPlayers;	
+};
+
 UCLASS()
 class PLATFORMJUMPERGAME_API UServerRow : public UUserWidget
 {
@@ -21,6 +32,12 @@ public:
 	void SetServerText(const FString& Text = "Unknown");
 	const FString& GetServerText() const;
 
+	void SetHostingUserText(const FString& Text = "Unknown");
+	const FString& GetHostingUserText() const;
+
+	void SetNumPlayersText(const FString& Text = "Unknown");
+	const FString& GetNumPlayersText() const;
+
 	void OnSelected();
 	void OnUnselected();
 
@@ -28,7 +45,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		class UTextBlock* ServerName;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
-		class UTextBlock* NumPlayers;
+		UTextBlock* HostingUser;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
+		UTextBlock* NumPlayers;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		class UButton* RowButton;
 
@@ -42,6 +61,8 @@ private:
 public:
 	FORCEINLINE void SetServerName(UTextBlock* Server) { ServerName = Server; }
 	FORCEINLINE class UTextBlock* GetServerName() const { return ServerName; }
+	FORCEINLINE UTextBlock* GetHostingUser() const { return HostingUser; }
+	FORCEINLINE UTextBlock* GetNumPlayers() const { return NumPlayers; }
 	
 
 	FORCEINLINE void Setup(UMainMenu* Parent, uint32 Index)
