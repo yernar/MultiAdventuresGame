@@ -80,7 +80,7 @@ void UPlatformsGameInstance::HostGame()
 			SessionInterface->DestroySession(SESSION_NAME);
 
 		FOnlineSessionSettings SessionSettings;
-		SessionSettings.bIsLANMatch = false;
+		SessionSettings.bIsLANMatch = (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL");
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
@@ -152,14 +152,18 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 	// TODO: Needs <Refactoring>
 	if (bSuccess && SessionSearch.IsValid() && MainMenuWidget)
 	{
-		TArray<FString> Servers;
+		TArray<FServerProperty> ServerProperties;
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf( TEXT("Finished searching for sessions") ));
-		for (const auto& Session : SessionSearch->SearchResults)
+		for (const auto& SearchResult : SessionSearch->SearchResults)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Session is found: %s"), *Session.GetSessionIdStr());
-			Servers.Add(*Session.GetSessionIdStr());
+			FServerProperty ServerProperty;
+			ServerProperty.Name = SearchResult.GetSessionIdStr();
+			ServerProperty.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
+			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
+			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
+			ServerProperties.Add(ServerProperty);
 		}
-		MainMenuWidget->AddServers(Servers);
+		MainMenuWidget->AddServers(ServerProperties);
 	}
 }
 

@@ -37,14 +37,16 @@ void UMainMenu::TeardownMainMenu()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::FALSE;
 }
 
-void UMainMenu::AddServers(TArray<FString> ServerNames)
+void UMainMenu::AddServers(TArray<FServerProperty> ServerNames)
 {
 	if (GetMenuInterface())
 	{
 		for (int32 i = 0; i < ServerNames.Num(); ++i)
 		{
 			ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(GetWorld(), ServerRowClass) : nullptr);
-			ServerRowWidget->SetServerText(ServerNames[i]);
+			ServerRowWidget->SetServerText(ServerNames[i].Name);
+			ServerRowWidget->SetHostingUserText(ServerNames[i].HostedUsername);
+			ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerNames[i].CurrentPlayers, ServerNames[i].MaxPlayers));
 			ServerRowWidget->Setup(this, i);
 			ServerList->AddChild(ServerRowWidget);
 			// TODO: After joining a game, delete all these widgets
@@ -61,6 +63,9 @@ const UServerRow* UMainMenu::GetSelectedServer() const
 
 void UMainMenu::UpdateSelectedServerColor()
 {
+	if (!SelectedIndex.IsSet())
+		return;
+
 	for (auto* Server : ServerList->GetAllChildren())
 	{
 		UServerRow* ServerRow = Cast<UServerRow>(Server);
@@ -101,7 +106,6 @@ void UMainMenu::OnHostButtonClicked()
 void UMainMenu::OnJoinMenuSwitcherButtonClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::JOIN_MENU));
-	AddServers({ "Jacking Ton", "Pharma Boy", "Slacks Blacks" });
 }
 
 void UMainMenu::OnSoloButtonClicked()

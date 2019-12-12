@@ -31,6 +31,27 @@ const FString& UServerRow::GetServerText() const
 	return GetServerName()->GetText().ToString();	
 }
 
+void UServerRow::SetHostingUserText(const FString& Text)
+{
+	// TODO: Refactor reusable function which accepts ENUM
+	GetHostingUser()->SetText(FText::FromString(Text));;
+}
+
+const FString& UServerRow::GetHostingUserText() const
+{
+	return GetHostingUser()->GetText().ToString();
+}
+
+void UServerRow::SetNumPlayersText(const FString& Text)
+{
+	GetNumPlayers()->SetText(FText::FromString(Text));;
+}
+
+const FString& UServerRow::GetNumPlayersText() const
+{
+	return GetNumPlayers()->GetText().ToString();
+}
+
 void UServerRow::OnSelected()
 {
 	UpdateTextColor(ServerName, FLinearColor::Green);
