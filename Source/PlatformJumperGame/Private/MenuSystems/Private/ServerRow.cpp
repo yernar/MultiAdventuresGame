@@ -34,7 +34,7 @@ const FString& UServerRow::GetServerText() const
 void UServerRow::SetHostingUserText(const FString& Text)
 {
 	// TODO: Refactor reusable function which accepts ENUM
-	GetHostingUser()->SetText(FText::FromString(Text));;
+	GetHostingUser()->SetText(FText::FromString(Text));
 }
 
 const FString& UServerRow::GetHostingUserText() const

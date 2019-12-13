@@ -69,7 +69,6 @@ public:
 	{
 		ParentMenu = Parent;
 		this->Index = Index;
-		SetServerText("Server " + FString::FromInt(Index));
 	}
 
 	FORCEINLINE uint32 GetIndex() { return Index; }

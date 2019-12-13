@@ -87,19 +87,19 @@ bool UMainMenu::Initialize()
 		return false;
 
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
-	HostButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostButtonClicked);
-	JoinMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinMenuSwitcherButtonClicked);
-	QuitFromMainButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitFromMainButtonClicked);
+	HostMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostMenuSwitcherClicked);
+	JoinMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinMenuSwitcherClicked);
+	QuitFromMainButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitFromMainClicked);
 
 	SoloButton->OnClicked.AddDynamic(this, &UMainMenu::OnSoloButtonClicked);
-	BackButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackButtonClicked);
-	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameButtonClicked);
+	BackFromJoinButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromJoinClicked);
+	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameClicked);
 	SoloButton->SetIsEnabled(false);
 
 	return true;
 }
 
-void UMainMenu::OnHostButtonClicked()
+void UMainMenu::OnHostMenuSwitcherClicked()
 {
 	if (GetMenuInterface())
 	{
@@ -107,7 +107,7 @@ void UMainMenu::OnHostButtonClicked()
 	}
 }
 
-void UMainMenu::OnJoinMenuSwitcherButtonClicked()
+void UMainMenu::OnJoinMenuSwitcherClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::JOIN_MENU));
 }
@@ -121,7 +121,7 @@ void UMainMenu::OnSoloButtonClicked()
 	}
 }
 
-void UMainMenu::OnQuitFromMainButtonClicked()
+void UMainMenu::OnQuitFromMainClicked()
 {
 	if (GetMenuInterface())
 	{
@@ -129,13 +129,13 @@ void UMainMenu::OnQuitFromMainButtonClicked()
 	}
 }
 
-void UMainMenu::OnBackButtonClicked()
+void UMainMenu::OnBackFromJoinClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
 	ServerList->ClearChildren();
 }
 
-void UMainMenu::OnJoinGameButtonClicked()
+void UMainMenu::OnJoinGameClicked()
 {
 	/*AddServers({ "SAP", "WTF" });
 	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());*/

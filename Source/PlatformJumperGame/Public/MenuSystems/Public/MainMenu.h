@@ -38,26 +38,26 @@ protected:
 	virtual bool Initialize() override;
 
 private:
-	// ******************************************************* First Menu Page Components ****************************************************************** //
+	// ******************************************************* Main Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UButton* SoloButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
-		UButton* HostButton;
+		UButton* HostMenuSwitcherButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinMenuSwitcherButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* QuitFromMainButton;
-	// ******************************************************* First Menu Page Components ****************************************************************** //
+	// ******************************************************* Main Menu Page Components ****************************************************************** //
 
-	// ******************************************************* Second Menu Page Components ****************************************************************** //
+	// ******************************************************* Join Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
-		UButton* BackButton;
+		UButton* BackFromJoinButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinGameButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
 		class UPanelWidget* ServerList;
-	// ******************************************************* Second Menu Page Components ****************************************************************** //
+	// ******************************************************* Join Menu Page Components ****************************************************************** //
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UWidgetSwitcher* MenuSwitcher;
@@ -78,16 +78,16 @@ public:
 
 private:
 	UFUNCTION(BlueprintCallable)
-		void OnHostButtonClicked();
+		void OnHostMenuSwitcherClicked();
 	UFUNCTION(BlueprintCallable)
-		void OnJoinMenuSwitcherButtonClicked();
+		void OnJoinMenuSwitcherClicked();
 	UFUNCTION(BlueprintCallable)
 		void OnSoloButtonClicked();
 	UFUNCTION(BlueprintCallable)
-		void OnQuitFromMainButtonClicked();
+		void OnQuitFromMainClicked();
 
 	UFUNCTION(BlueprintCallable)
-		void OnBackButtonClicked();
+		void OnBackFromJoinClicked();
 	UFUNCTION(BlueprintCallable)
-		void OnJoinGameButtonClicked();	
+		void OnJoinGameClicked();	
 };
