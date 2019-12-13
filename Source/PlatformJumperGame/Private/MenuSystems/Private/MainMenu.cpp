@@ -44,11 +44,15 @@ void UMainMenu::AddServers(TArray<FServerProperty> ServerNames)
 		for (int32 i = 0; i < ServerNames.Num(); ++i)
 		{
 			ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(GetWorld(), ServerRowClass) : nullptr);
-			ServerRowWidget->SetServerText(ServerNames[i].Name);
-			ServerRowWidget->SetHostingUserText(ServerNames[i].HostedUsername);
-			ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerNames[i].CurrentPlayers, ServerNames[i].MaxPlayers));
-			ServerRowWidget->Setup(this, i);
-			ServerList->AddChild(ServerRowWidget);
+
+			if (ServerRowWidget)
+			{
+				ServerRowWidget->SetServerText(ServerNames[i].Name);
+				ServerRowWidget->SetHostingUserText(ServerNames[i].HostedUsername);
+				ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerNames[i].CurrentPlayers, ServerNames[i].MaxPlayers));
+				ServerRowWidget->Setup(this, i);
+				ServerList->AddChild(ServerRowWidget);
+			}
 			// TODO: After joining a game, delete all these widgets
 		}		
 	}

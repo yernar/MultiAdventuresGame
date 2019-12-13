@@ -158,8 +158,8 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 		{
 			FServerProperty ServerProperty;
 			ServerProperty.Name = SearchResult.GetSessionIdStr();
-			ServerProperty.CurrentPlayers = SearchResult.Session.NumOpenPublicConnections;
 			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
+			ServerProperty.CurrentPlayers = ServerProperty.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;			
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
 			ServerProperties.Add(ServerProperty);
 		}
