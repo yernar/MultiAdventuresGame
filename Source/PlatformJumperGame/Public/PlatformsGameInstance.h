@@ -30,7 +30,7 @@ protected:
 
 private:
 	UFUNCTION(Exec)
-		virtual void HostGame() override;
+		virtual void HostGame(const FName& HostName = "Default") override;
 	UFUNCTION(Exec)
 		virtual void JoinGame(uint32 ServerIndex) override;
 	UFUNCTION(Exec)

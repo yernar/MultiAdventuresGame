@@ -7,6 +7,7 @@
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
+#include "Components/EditableTextBox.h"
 
 const uint32 UMainMenu::UnselectedIndex = 667;
 
@@ -87,24 +88,27 @@ bool UMainMenu::Initialize()
 		return false;
 
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
+	SoloButton->OnClicked.AddDynamic(this, &UMainMenu::OnSoloButtonClicked);
 	HostMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostMenuSwitcherClicked);
 	JoinMenuSwitcherButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinMenuSwitcherClicked);
 	QuitFromMainButton->OnClicked.AddDynamic(this, &UMainMenu::OnQuitFromMainClicked);
 
-	SoloButton->OnClicked.AddDynamic(this, &UMainMenu::OnSoloButtonClicked);
+	SoloButton->SetIsEnabled(false);
+	
 	BackFromJoinButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromJoinClicked);
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameClicked);
-	SoloButton->SetIsEnabled(false);
+
+	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
+	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromHostClicked);
+	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);
+	
 
 	return true;
 }
 
 void UMainMenu::OnHostMenuSwitcherClicked()
 {
-	if (GetMenuInterface())
-	{
-		MenuInterface->HostGame();
-	}
+	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::HOST_MENU));
 }
 
 void UMainMenu::OnJoinMenuSwitcherClicked()
@@ -117,7 +121,7 @@ void UMainMenu::OnSoloButtonClicked()
 	// TODO: Make a solo game mode & function related with solo gameplay.
 	if (GetMenuInterface())
 	{
-		MenuInterface->HostGame();
+		GetMenuInterface()->HostGame();
 	}
 }
 
@@ -125,7 +129,7 @@ void UMainMenu::OnQuitFromMainClicked()
 {
 	if (GetMenuInterface())
 	{
-		MenuInterface->QuitFromMainMenu();
+		GetMenuInterface()->QuitFromMainMenu();
 	}
 }
 
@@ -143,11 +147,30 @@ void UMainMenu::OnJoinGameClicked()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX: %d"), SelectedIndex.GetValue());
 		
-		MenuInterface->JoinGame(SelectedIndex.GetValue()/*IPTextBox->GetText().ToString()*/);
+		GetMenuInterface()->JoinGame(SelectedIndex.GetValue()/*IPTextBox->GetText().ToString()*/);
 	}
 
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX:ERROR"))
 	}
+}
+
+void UMainMenu::OnBackFromHostClicked()
+{
+	HostNameTextBox->SetText(FText()); // Erasing The Text
+	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
+}
+
+void UMainMenu::OnHostGameClicked()
+{
+	if (GetMenuInterface())
+		HostNameTextBox->GetText().IsEmpty() ?
+			GetMenuInterface()->HostGame() :
+			GetMenuInterface()->HostGame(FName(*HostNameTextBox->GetText().ToString()));
+}
+
+void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
+{
+	UE_LOG(LogTemp, Warning, TEXT("TEXT IS: %s"), *Text.ToString())
 }

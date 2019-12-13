@@ -10,10 +10,11 @@
  * 
  */
 UENUM()
-enum class EMenuTypes : int32
+enum class EMenuTypes : uint32
 {
 	MAIN_MENU,
 	JOIN_MENU,
+	HOST_MENU
 };
 
 UCLASS()
@@ -59,6 +60,15 @@ private:
 		class UPanelWidget* ServerList;
 	// ******************************************************* Join Menu Page Components ****************************************************************** //
 
+	// ******************************************************* Host Menu Page Components ****************************************************************** //
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* BackFromHostButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* HostGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
+		class UEditableTextBox* HostNameTextBox;
+	// ******************************************************* Host Menu Page Components ****************************************************************** //
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UWidgetSwitcher* MenuSwitcher;
 
@@ -77,17 +87,24 @@ public:
 	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
 
 private:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnHostMenuSwitcherClicked();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnJoinMenuSwitcherClicked();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnSoloButtonClicked();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnQuitFromMainClicked();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnBackFromJoinClicked();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 		void OnJoinGameClicked();	
+
+	UFUNCTION()
+		void OnBackFromHostClicked();
+	UFUNCTION()
+		void OnHostGameClicked();
+	UFUNCTION()
+		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 };

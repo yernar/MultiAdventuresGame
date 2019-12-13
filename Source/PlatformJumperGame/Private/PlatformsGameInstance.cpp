@@ -70,7 +70,7 @@ void UPlatformsGameInstance::Init()
 	}
 }
 
-void UPlatformsGameInstance::HostGame()
+void UPlatformsGameInstance::HostGame(const FName& HostName)
 {
 	if (SessionInterface.IsValid())
 	{
@@ -80,6 +80,7 @@ void UPlatformsGameInstance::HostGame()
 			SessionInterface->DestroySession(SESSION_NAME);
 
 		FOnlineSessionSettings SessionSettings;
+		SessionSettings.Set("HostName", HostName, EOnlineDataAdvertisementType::ViaOnlineService);
 		SessionSettings.bIsLANMatch = (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL");
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
