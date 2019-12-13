@@ -3,4 +3,6 @@
 
 #include "MenuInterface.h"
 
+const FString IMenuInterface::UnspecifiedHostName = "Unknown";
+
 // Add default functionality here for any IMenuInterface functions that are not pure virtual.

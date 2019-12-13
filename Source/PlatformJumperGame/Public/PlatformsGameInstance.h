@@ -30,7 +30,7 @@ protected:
 
 private:
 	UFUNCTION(Exec)
-		virtual void HostGame(const FName& HostName = "Default") override;
+		virtual void HostGame(const FString& HostName) override;
 	UFUNCTION(Exec)
 		virtual void JoinGame(uint32 ServerIndex) override;
 	UFUNCTION(Exec)
@@ -57,4 +57,5 @@ private:
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;	
 	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;
+	const static FName SESSION_HOST_NAME_KEY;
 };

@@ -14,6 +14,7 @@
 #include "OnlineSessionSettings.h"
 
 const FName UPlatformsGameInstance::SESSION_NAME = "PLATFORMS";
+const FName UPlatformsGameInstance::SESSION_HOST_NAME_KEY = "SessionHostName";
 
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -70,7 +71,7 @@ void UPlatformsGameInstance::Init()
 	}
 }
 
-void UPlatformsGameInstance::HostGame(const FName& HostName)
+void UPlatformsGameInstance::HostGame(const FString& HostName)
 {
 	if (SessionInterface.IsValid())
 	{
@@ -80,7 +81,7 @@ void UPlatformsGameInstance::HostGame(const FName& HostName)
 			SessionInterface->DestroySession(SESSION_NAME);
 
 		FOnlineSessionSettings SessionSettings;
-		SessionSettings.Set("HostName", HostName, EOnlineDataAdvertisementType::ViaOnlineService);
+		SessionSettings.Set(SESSION_HOST_NAME_KEY, HostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 		SessionSettings.bIsLANMatch = (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL");
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
@@ -158,7 +159,7 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 		for (const auto& SearchResult : SessionSearch->SearchResults)
 		{
 			FServerProperty ServerProperty;
-			ServerProperty.Name = SearchResult.GetSessionIdStr();
+			SearchResult.Session.SessionSettings.Get(SESSION_HOST_NAME_KEY, ServerProperty.Name);
 			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
 			ServerProperty.CurrentPlayers = ServerProperty.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;			
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;

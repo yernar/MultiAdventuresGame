@@ -167,10 +167,11 @@ void UMainMenu::OnHostGameClicked()
 	if (GetMenuInterface())
 		HostNameTextBox->GetText().IsEmpty() ?
 			GetMenuInterface()->HostGame() :
-			GetMenuInterface()->HostGame(FName(*HostNameTextBox->GetText().ToString()));
+			GetMenuInterface()->HostGame(HostNameTextBox->GetText().ToString());
 }
 
 void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
-	UE_LOG(LogTemp, Warning, TEXT("TEXT IS: %s"), *Text.ToString())
+	if (CommitMethod == ETextCommit::OnEnter)
+		OnHostGameClicked();;
 }
