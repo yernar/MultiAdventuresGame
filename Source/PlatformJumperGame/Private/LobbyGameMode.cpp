@@ -12,10 +12,7 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	++NumPlayers;
-
-	if (NumPlayers == 3)
-		GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen");
+	++NumPlayers;		
 }
 
 void ALobbyGameMode::Logout(AController* Exiting)
@@ -23,4 +20,9 @@ void ALobbyGameMode::Logout(AController* Exiting)
 	Super::Logout(Exiting);
 
 	--NumPlayers;
+}
+
+void ALobbyGameMode::TravelGameMap()
+{
+	GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen");
 }

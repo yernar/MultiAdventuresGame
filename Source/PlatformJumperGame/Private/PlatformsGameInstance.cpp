@@ -13,7 +13,7 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 
-const FName UPlatformsGameInstance::SESSION_NAME = "PLATFORMS";
+const FName UPlatformsGameInstance::SESSION_NAME = "GameSession";
 const FName UPlatformsGameInstance::SESSION_HOST_NAME_KEY = "SessionHostName";
 
 UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
@@ -80,12 +80,12 @@ void UPlatformsGameInstance::HostGame(const FString& HostName)
 		if (OnlineSession)
 			SessionInterface->DestroySession(SESSION_NAME);
 
-		FOnlineSessionSettings SessionSettings;
-		SessionSettings.Set(SESSION_HOST_NAME_KEY, HostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+		FOnlineSessionSettings SessionSettings;		
 		SessionSettings.bIsLANMatch = (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL");
-		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
+		SessionSettings.Set(SESSION_HOST_NAME_KEY, HostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);					
 	}	
