@@ -3,6 +3,11 @@
 
 #include "LobbyGameMode.h"
 
+ALobbyGameMode::ALobbyGameMode()
+{
+	bUseSeamlessTravel = true;
+}
+
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
