@@ -13,3 +13,15 @@ APlatformJumperGameGameMode::APlatformJumperGameGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 }
+
+void APlatformJumperGameGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	numplayers++;
+	UE_LOG(LogTemp, Warning, TEXT("We have now: %d players!"), numplayers)
+}
+
+void APlatformJumperGameGameMode::Logout(AController* Exiting)
+{
+	numplayers--;
+	UE_LOG(LogTemp, Warning, TEXT("We have now: %d players!"), numplayers)
+}

@@ -138,7 +138,7 @@ void UPlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bSu
 		MainMenuWidget->TeardownMainMenu();
 
 	GetEngine()->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, TEXT("Hosting"));
-	if (GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen"))
+	if (GetWorld()->ServerTravel("/Game/Maps/Lobby?listen"))
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Hosted the session")));
 }
 
