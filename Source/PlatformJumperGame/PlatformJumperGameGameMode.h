@@ -13,6 +13,13 @@ class APlatformJumperGameGameMode : public AGameModeBase
 
 public:
 	APlatformJumperGameGameMode();
+
+protected:
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Exiting) override;
+
+private:
+	int numplayers = 0;
 };
 
 
