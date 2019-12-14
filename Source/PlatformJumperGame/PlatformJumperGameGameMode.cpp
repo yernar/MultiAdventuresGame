@@ -16,12 +16,22 @@ APlatformJumperGameGameMode::APlatformJumperGameGameMode()
 
 void APlatformJumperGameGameMode::PostLogin(APlayerController* NewPlayer)
 {
+	Super::PostLogin(NewPlayer);
+
 	numplayers++;
-	UE_LOG(LogTemp, Warning, TEXT("We have now: %d players!"), numplayers)
+	
+	UE_LOG(LogTemp, Warning, TEXT("We have now: %d players!"), numplayers);
+
+	if (numplayers == 2)
+		if (GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen"))
+			UE_LOG (LogTemp, Warning, TEXT("SUCCESS"))
+		else UE_LOG(LogTemp, Warning, TEXT("NOPE"))
 }
 
 void APlatformJumperGameGameMode::Logout(AController* Exiting)
 {
+	Super::Logout(Exiting);
+
 	numplayers--;
 	UE_LOG(LogTemp, Warning, TEXT("We have now: %d players!"), numplayers)
 }
