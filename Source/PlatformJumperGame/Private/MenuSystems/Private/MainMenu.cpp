@@ -114,6 +114,7 @@ void UMainMenu::OnHostMenuSwitcherClicked()
 void UMainMenu::OnJoinMenuSwitcherClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::JOIN_MENU));
+	MenuInterface->RefreshServers();
 }
 
 void UMainMenu::OnSoloButtonClicked()

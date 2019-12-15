@@ -66,7 +66,7 @@ void UPlatformsGameInstance::Init()
 		SessionSearch->MaxSearchResults = 100;
 		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		// SessionSearch->bIsLanQuery = true;
-		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+		// SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 		
 	}
 }

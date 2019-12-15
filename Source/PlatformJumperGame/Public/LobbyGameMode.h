@@ -25,5 +25,7 @@ public:
 
 private:
 	int NumPlayers = 0;
+
+	FTimerHandle TimerHandle;
 	
 };

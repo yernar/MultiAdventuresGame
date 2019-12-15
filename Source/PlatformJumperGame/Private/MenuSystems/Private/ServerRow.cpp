@@ -56,12 +56,14 @@ void UServerRow::OnSelected()
 {
 	UpdateTextColor(ServerName, FLinearColor::Green);
 	UpdateTextColor(NumPlayers, FLinearColor::Green);
+	UpdateTextColor(HostingUser, FLinearColor::Green);
 }
 
 void UServerRow::OnUnselected()
 {
 	SetTextDefaultColor(ServerName);
 	SetTextDefaultColor(NumPlayers);
+	SetTextDefaultColor(HostingUser);
 }
 
 void UServerRow::OnClicked()
@@ -77,6 +79,13 @@ void UServerRow::OnHovered()
 	{
 		UpdateTextColor(ServerName, FLinearColor::Yellow);
 		UpdateTextColor(NumPlayers, FLinearColor::Yellow);
+		UpdateTextColor(HostingUser, FLinearColor::Yellow);
+	}
+	else
+	{
+		UpdateTextColor(ServerName, FLinearColor::Gray);
+		UpdateTextColor(NumPlayers, FLinearColor::Gray);
+		UpdateTextColor(HostingUser, FLinearColor::Gray);
 	}
 }
 
@@ -86,6 +95,13 @@ void UServerRow::OnUnhovored()
 	{
 		SetTextDefaultColor(ServerName);
 		SetTextDefaultColor(NumPlayers);
+		SetTextDefaultColor(HostingUser);
+	}
+	else
+	{
+		UpdateTextColor(ServerName, FLinearColor::Green);
+		UpdateTextColor(NumPlayers, FLinearColor::Green);
+		UpdateTextColor(HostingUser, FLinearColor::Green);
 	}
 }
 

@@ -12,7 +12,10 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	++NumPlayers;		
+	++NumPlayers;
+
+	if (NumPlayers >= 2)	
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ALobbyGameMode::TravelGameMap, 10.f, false);
 }
 
 void ALobbyGameMode::Logout(AController* Exiting)
