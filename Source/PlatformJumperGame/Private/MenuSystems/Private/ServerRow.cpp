@@ -54,16 +54,12 @@ const FString& UServerRow::GetNumPlayersText() const
 
 void UServerRow::OnSelected()
 {
-	UpdateTextColor(ServerName, FLinearColor::Green);
-	UpdateTextColor(NumPlayers, FLinearColor::Green);
-	UpdateTextColor(HostingUser, FLinearColor::Green);
+	UpdateTextColor(FLinearColor::Green);
 }
 
 void UServerRow::OnUnselected()
 {
-	SetTextDefaultColor(ServerName);
-	SetTextDefaultColor(NumPlayers);
-	SetTextDefaultColor(HostingUser);
+	SetTextDefaultColor();
 }
 
 void UServerRow::OnClicked()
@@ -76,41 +72,29 @@ void UServerRow::OnClicked()
 void UServerRow::OnHovered()
 {
 	if (Index != ParentMenu->GetSelectedIndex())
-	{
-		UpdateTextColor(ServerName, FLinearColor::Yellow);
-		UpdateTextColor(NumPlayers, FLinearColor::Yellow);
-		UpdateTextColor(HostingUser, FLinearColor::Yellow);
-	}
+		UpdateTextColor(FLinearColor::Yellow);
 	else
-	{
-		UpdateTextColor(ServerName, FLinearColor::Gray);
-		UpdateTextColor(NumPlayers, FLinearColor::Gray);
-		UpdateTextColor(HostingUser, FLinearColor::Gray);
-	}
+		UpdateTextColor(FLinearColor::Gray);
 }
 
 void UServerRow::OnUnhovored()
 {
 	if (Index != ParentMenu->GetSelectedIndex())
-	{
-		SetTextDefaultColor(ServerName);
-		SetTextDefaultColor(NumPlayers);
-		SetTextDefaultColor(HostingUser);
-	}
+		SetTextDefaultColor();
 	else
-	{
-		UpdateTextColor(ServerName, FLinearColor::Green);
-		UpdateTextColor(NumPlayers, FLinearColor::Green);
-		UpdateTextColor(HostingUser, FLinearColor::Green);
-	}
+		UpdateTextColor(FLinearColor::Green);
 }
 
-void UServerRow::UpdateTextColor(UTextBlock* TextBlock, const FLinearColor& Color)
+void UServerRow::UpdateTextColor(const FLinearColor& Color)
 {
-	TextBlock->SetColorAndOpacity(FSlateColor(Color));
+	ServerName->SetColorAndOpacity(FSlateColor(Color));
+	NumPlayers->SetColorAndOpacity(FSlateColor(Color));
+	HostingUser->SetColorAndOpacity(FSlateColor(Color));
 }
 
-void UServerRow::SetTextDefaultColor(UTextBlock* TextBlock)
+void UServerRow::SetTextDefaultColor()
 {
-	TextBlock->SetColorAndOpacity(FSlateColor(DefaultTextColor));
+	ServerName->SetColorAndOpacity(FSlateColor(DefaultTextColor));
+	NumPlayers->SetColorAndOpacity(FSlateColor(DefaultTextColor));
+	HostingUser->SetColorAndOpacity(FSlateColor(DefaultTextColor));
 }

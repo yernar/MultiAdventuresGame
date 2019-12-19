@@ -81,6 +81,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 		void OnUnhovored();
 
-	void UpdateTextColor(class UTextBlock* TextBlock, const FLinearColor& Color);
-	void SetTextDefaultColor(class UTextBlock* TextBlock);
+	void UpdateTextColor(const FLinearColor& Color);
+	void SetTextDefaultColor();
 };
