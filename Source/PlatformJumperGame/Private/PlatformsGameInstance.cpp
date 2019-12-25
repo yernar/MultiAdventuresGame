@@ -122,18 +122,11 @@ void UPlatformsGameInstance::QuitFromMainMenu()
 void UPlatformsGameInstance::RefreshServers()
 {
 	if (SessionInterface.IsValid())
-	{
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-	}
 }
 
 void UPlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bSuccess)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Session is creating: %d"), bSuccess)
-
-	if (!GetEngine())
-		return;
-
 	if (MainMenuWidget)
 		MainMenuWidget->TeardownMainMenu();
 
@@ -151,21 +144,20 @@ void UPlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bS
 
 void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 {
-	// TODO: Needs <Refactoring>
 	if (bSuccess && SessionSearch.IsValid() && MainMenuWidget)
 	{
 		TArray<FServerProperty> ServerProperties;
-		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Blue, FString::Printf( TEXT("Finished searching for sessions") ));
 		for (const auto& SearchResult : SessionSearch->SearchResults)
 		{
 			FServerProperty ServerProperty;
 			SearchResult.Session.SessionSettings.Get(SESSION_HOST_NAME_KEY, ServerProperty.Name);
+
 			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
 			ServerProperty.CurrentPlayers = ServerProperty.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;			
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
 			ServerProperties.Add(ServerProperty);
 		}
-		MainMenuWidget->AddServers(ServerProperties);
+		MainMenuWidget->AddServersToServerList(ServerProperties);		
 	}
 }
 
@@ -173,30 +165,29 @@ void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSes
 {
 	FString ResolvedURL;
 	SessionInterface->GetResolvedConnectString(SessionName, ResolvedURL);
-
+#if WITH_EDITOR
 	switch (JoinSessionCompleteResult)
 	{
 		case EOnJoinSessionCompleteResult::Success:
 			UE_LOG(LogTemp, Warning, TEXT("Success"))
 			break;
 		case EOnJoinSessionCompleteResult::SessionIsFull:
-			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			UE_LOG(LogTemp, Warning, TEXT("SessionIsFull"))
 			break;
 		case EOnJoinSessionCompleteResult::SessionDoesNotExist:
-			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			UE_LOG(LogTemp, Warning, TEXT("SessionDoesNotExist"))
 			break;
 		case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
-			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			UE_LOG(LogTemp, Warning, TEXT("CouldNotRetrieveAddress"))
 			break;
 		case EOnJoinSessionCompleteResult::AlreadyInSession:
-			UE_LOG(LogTemp, Warning, TEXT("Success"))
+			UE_LOG(LogTemp, Warning, TEXT("AlreadyInSession"))
 			break;
 		case EOnJoinSessionCompleteResult::UnknownError:
 			UE_LOG(LogTemp, Warning, TEXT("UnknownError"))
 			break;
-		default:
-			break;
 	}
+#endif
 
 	GetFirstLocalPlayerController(GetWorld())->ClientTravel(ResolvedURL, ETravelType::TRAVEL_Absolute);
 }

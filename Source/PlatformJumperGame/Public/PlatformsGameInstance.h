@@ -25,6 +25,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void LoadGameMenu();
 
+	/*FORCEINLINE TArray<FServerProperty>* GetServerPorperties() { return ServerProperties; }*/
+
 protected:
 	virtual void Init();
 
@@ -54,6 +56,7 @@ private:
 	class UGameMenu* GameMenuWidget;
 	// ****************************MENU VARS************************ //
 
+	
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;	
 	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;

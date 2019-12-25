@@ -38,7 +38,7 @@ void UMainMenu::TeardownMainMenu()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::FALSE;
 }
 
-void UMainMenu::AddServers(TArray<FServerProperty> ServerNames)
+void UMainMenu::AddServersToServerList(const TArray<FServerProperty>& ServerNames)
 {
 	if (GetMenuInterface())
 	{
@@ -78,7 +78,6 @@ void UMainMenu::UpdateSelectedServerColor()
 			ServerRow->OnSelected();
 		else
 			ServerRow->OnUnselected();
-
 	}
 }
 
@@ -100,8 +99,7 @@ bool UMainMenu::Initialize()
 
 	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
 	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromHostClicked);
-	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);
-	
+	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);	
 
 	return true;
 }
@@ -119,19 +117,14 @@ void UMainMenu::OnJoinMenuSwitcherClicked()
 
 void UMainMenu::OnSoloButtonClicked()
 {
-	// TODO: Make a solo game mode & function related with solo gameplay.
 	if (GetMenuInterface())
-	{
 		GetMenuInterface()->HostGame();
-	}
 }
 
 void UMainMenu::OnQuitFromMainClicked()
 {
 	if (GetMenuInterface())
-	{
 		GetMenuInterface()->QuitFromMainMenu();
-	}
 }
 
 void UMainMenu::OnBackFromJoinClicked()
@@ -144,17 +137,8 @@ void UMainMenu::OnJoinGameClicked()
 {
 	/*AddServers({ "SAP", "WTF" });
 	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());*/
-	if (SelectedIndex.IsSet() && GetMenuInterface())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX: %d"), SelectedIndex.GetValue());
-		
-		GetMenuInterface()->JoinGame(SelectedIndex.GetValue()/*IPTextBox->GetText().ToString()*/);
-	}
-
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SELECTED INDEX:ERROR"))
-	}
+	if (SelectedIndex.IsSet() && GetMenuInterface())	
+		GetMenuInterface()->JoinGame(SelectedIndex.GetValue());
 }
 
 void UMainMenu::OnBackFromHostClicked()
@@ -174,5 +158,5 @@ void UMainMenu::OnHostGameClicked()
 void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
 	if (CommitMethod == ETextCommit::OnEnter)
-		OnHostGameClicked();;
+		OnHostGameClicked();
 }
