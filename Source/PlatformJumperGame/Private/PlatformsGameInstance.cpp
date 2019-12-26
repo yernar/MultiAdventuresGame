@@ -49,11 +49,6 @@ void UPlatformsGameInstance::LoadGameMenu()
 
 void UPlatformsGameInstance::Init()
 {
-	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
-	UE_LOG(LogTemp, Warning, TEXT("It's: %s."), *OSS->GetOnlineServiceName().ToString())
-	SessionInterface = OSS->GetSessionInterface();
-	UE_LOG(LogTemp, Warning, TEXT("Interface is valid: %d."), SessionInterface.IsValid())
-
 	if (SessionInterface.IsValid())
 	{		
 		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
@@ -65,8 +60,6 @@ void UPlatformsGameInstance::Init()
 		SessionSearch = MakeShareable(new FOnlineSessionSearch);
 		SessionSearch->MaxSearchResults = 100;
 		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		// SessionSearch->bIsLanQuery = true;
-		// SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 		
 	}
 }
