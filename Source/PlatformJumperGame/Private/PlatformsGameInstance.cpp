@@ -49,6 +49,9 @@ void UPlatformsGameInstance::LoadGameMenu()
 
 void UPlatformsGameInstance::Init()
 {
+	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
+	SessionInterface = OSS->GetSessionInterface();
+
 	if (SessionInterface.IsValid())
 	{		
 		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
