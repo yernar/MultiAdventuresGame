@@ -25,7 +25,7 @@ void UMainMenu::SetupMainMenu()
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::TRUE;	
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;	
 }
 
 void UMainMenu::TeardownMainMenu()
@@ -35,7 +35,7 @@ void UMainMenu::TeardownMainMenu()
 	FInputModeGameOnly GameInputMode;
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(GameInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::FALSE;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 }
 
 void UMainMenu::AddServersToServerList(const TArray<FServerProperty>& ServerNames)
@@ -81,6 +81,13 @@ void UMainMenu::UpdateSelectedServerColor()
 	}
 }
 
+void UMainMenu::ToggleRefreshingServersSectionButtons(bool bIsEnabled)
+{
+	BackFromJoinButton->SetIsEnabled(bIsEnabled);
+	RefreshServersListButton->SetIsEnabled(bIsEnabled);
+	JoinGameButton->SetIsEnabled(bIsEnabled);
+}
+
 bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize())
@@ -95,6 +102,7 @@ bool UMainMenu::Initialize()
 	SoloButton->SetIsEnabled(false);
 	
 	BackFromJoinButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromJoinClicked);
+	RefreshServersListButton->OnClicked.AddDynamic(this, &UMainMenu::OnRefreshServersListClicked);
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameClicked);
 
 	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
@@ -133,10 +141,19 @@ void UMainMenu::OnBackFromJoinClicked()
 	ServerList->ClearChildren();
 }
 
+void UMainMenu::OnRefreshServersListClicked()
+{
+	ServerList->ClearChildren();
+
+	if (MenuInterface)
+	{		
+		ToggleRefreshingServersSectionButtons(false);
+		MenuInterface->RefreshServers();
+	}
+}
+
 void UMainMenu::OnJoinGameClicked()
 {
-	/*AddServers({ "SAP", "WTF" });
-	UE_LOG(LogTemp, Warning, TEXT("Now: %d"), ServerList->GetChildrenCount());*/
 	if (SelectedIndex.IsSet() && GetMenuInterface())	
 		GetMenuInterface()->JoinGame(SelectedIndex.GetValue());
 }

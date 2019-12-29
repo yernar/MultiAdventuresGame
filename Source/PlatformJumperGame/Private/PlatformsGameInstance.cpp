@@ -153,7 +153,8 @@ void UPlatformsGameInstance::OnFindSessionsComplete(bool bSuccess)
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
 			ServerProperties.Add(ServerProperty);
 		}
-		MainMenuWidget->AddServersToServerList(ServerProperties);		
+		MainMenuWidget->AddServersToServerList(ServerProperties);	
+		MainMenuWidget->ToggleRefreshingServersSectionButtons(true);
 	}
 }
 

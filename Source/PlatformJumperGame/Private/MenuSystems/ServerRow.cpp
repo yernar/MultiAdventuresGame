@@ -74,7 +74,7 @@ void UServerRow::OnHovered()
 	if (Index != ParentMenu->GetSelectedIndex())
 		UpdateTextColor(FLinearColor::Yellow);
 	else
-		UpdateTextColor(FLinearColor::Gray);
+		UpdateTextColor(FLinearColor::Red);
 }
 
 void UServerRow::OnUnhovored()

@@ -15,7 +15,7 @@ void UGameMenu::SetupGameMenu()
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::TRUE;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 }
 
 void UGameMenu::TeardownGameMenu()
@@ -25,7 +25,7 @@ void UGameMenu::TeardownGameMenu()
 	FInputModeGameOnly GameInputMode;
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(GameInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = Windows::FALSE;
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 }
 
 bool UGameMenu::Initialize()

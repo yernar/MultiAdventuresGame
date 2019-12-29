@@ -32,6 +32,7 @@ public:
 	const class UServerRow* GetSelectedServer() const;
 
 	void UpdateSelectedServerColor();
+	void ToggleRefreshingServersSectionButtons(bool bIsEnabled);
 
 	static const uint32 UnselectedIndex;
 
@@ -54,6 +55,8 @@ private:
 	// ******************************************************* Join Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* BackFromJoinButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* RefreshServersListButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* JoinGameButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
@@ -98,6 +101,8 @@ private:
 
 	UFUNCTION()
 		void OnBackFromJoinClicked();
+	UFUNCTION()
+		void OnRefreshServersListClicked();
 	UFUNCTION()
 		void OnJoinGameClicked();	
 
