@@ -29,6 +29,7 @@ public:
 
 protected:
 	virtual void Init();
+	virtual void Shutdown();
 
 private:
 	UFUNCTION(Exec)
@@ -50,7 +51,7 @@ private:
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
-	TSubclassOf<class UUserWidget> GameMenuClass;
+	TSubclassOf<UUserWidget> GameMenuClass;
 
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;

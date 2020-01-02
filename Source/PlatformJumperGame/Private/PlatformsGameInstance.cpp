@@ -67,15 +67,15 @@ void UPlatformsGameInstance::Init()
 	}
 }
 
+void UPlatformsGameInstance::Shutdown()
+{
+	SessionInterface->DestroySession(SESSION_NAME);
+}
+
 void UPlatformsGameInstance::HostGame(const FString& HostName)
 {
 	if (SessionInterface.IsValid())
 	{
-		FNamedOnlineSession* OnlineSession = SessionInterface->GetNamedSession(SESSION_NAME);
-
-		if (OnlineSession)
-			SessionInterface->DestroySession(SESSION_NAME);
-
 		FOnlineSessionSettings SessionSettings;		
 		SessionSettings.bIsLANMatch = (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL");
 		SessionSettings.NumPublicConnections = 5;
@@ -89,25 +89,18 @@ void UPlatformsGameInstance::HostGame(const FString& HostName)
 
 void UPlatformsGameInstance::JoinGame(uint32 ServerIndex)
 {
-
 	if (MainMenuWidget && SessionInterface.IsValid() && SessionSearch.IsValid())
 	{
 		MainMenuWidget->TeardownMainMenu();
 
-		SessionInterface->JoinSession(0, FName(*MainMenuWidget->GetSelectedServer()->GetServerText()), SessionSearch->SearchResults[ServerIndex]);
-		
+		SessionInterface->JoinSession(0, FName(*MainMenuWidget->GetSelectedServer()->GetServerText()), SessionSearch->SearchResults[ServerIndex]);		
 	}
-	//RefreshServers();
-		// MainMenuWidget->TeardownMainMenu();
-
-	/*GetPrimaryPlayerController()->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-	GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Joining the %s"), *Address));*/
 }
 
 void UPlatformsGameInstance::QuitToMainMenu()
 {
 	GetPrimaryPlayerController()->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
-	SessionInterface->DestroySession(SESSION_NAME);
+	SessionInterface->DestroySession(SESSION_NAME);		
 }
 
 void UPlatformsGameInstance::QuitFromMainMenu()
@@ -126,7 +119,6 @@ void UPlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bSu
 	if (MainMenuWidget)
 		MainMenuWidget->TeardownMainMenu();
 
-	GetEngine()->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, TEXT("Hosting"));
 	if (GetWorld()->ServerTravel("/Game/Maps/Lobby?listen"))
 		GetEngine()->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, FString::Printf(TEXT("Hosted the session")));
 }

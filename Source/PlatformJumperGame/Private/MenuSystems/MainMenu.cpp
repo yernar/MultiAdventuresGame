@@ -107,7 +107,10 @@ bool UMainMenu::Initialize()
 
 	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
 	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromHostClicked);
-	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);	
+	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);
+
+	/* Solo is Not Available R8 now */
+	SoloButton->SetIsEnabled(false);
 
 	return true;
 }
@@ -121,12 +124,14 @@ void UMainMenu::OnJoinMenuSwitcherClicked()
 {
 	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::JOIN_MENU));
 	MenuInterface->RefreshServers();
+
+	/* Wait Until Session Finishes Searching for Available Servers */
+	ToggleRefreshingServersSectionButtons(false);
 }
 
 void UMainMenu::OnSoloButtonClicked()
 {
-	if (GetMenuInterface())
-		GetMenuInterface()->HostGame();
+	// TODO
 }
 
 void UMainMenu::OnQuitFromMainClicked()
