@@ -2,6 +2,7 @@
 
 #include "PlatformJumperGameCharacter.h"
 #include "PlatformsGameInstance.h"
+#include "MainPlayerState.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -81,6 +82,9 @@ void APlatformJumperGameCharacter::SetupPlayerInputComponent(class UInputCompone
 
 	// Calling game menu
 	PlayerInputComponent->BindAction("CallGameMenu", IE_Pressed, this, &APlatformJumperGameCharacter::CallGameMenu);
+
+	// Toggling status readiness
+	PlayerInputComponent->BindAction("ToggleReadinessStatus", IE_Pressed, this, &APlatformJumperGameCharacter::ToggleStatusReadiness);
 }
 
 
@@ -144,4 +148,13 @@ void APlatformJumperGameCharacter::CallGameMenu()
 {
 	Cast<UPlatformsGameInstance>(GetGameInstance())->LoadGameMenu();
 	TogglePlayerCharacterInput(false);
+}
+
+void APlatformJumperGameCharacter::ToggleStatusReadiness()
+{
+	AMainPlayerState* MainPlayerState = Cast<AMainPlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
+	MainPlayerState->ReadyStatus( (MainPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
+		EPlayerReadinessStatus::READY : EPlayerReadinessStatus::NOT_READY) );
+
+
 }

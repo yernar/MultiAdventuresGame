@@ -20,11 +20,13 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* Exiting) override;
 
+	void CheckPlayersReadiness();
+
 	UFUNCTION(BlueprintCallable)
 		void TravelGameMap();
 
 private:
-	int NumPlayers = 0;
+	int NumPlayers = 0;	
 
 	FTimerHandle TimerHandle;
 	
