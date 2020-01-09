@@ -23,7 +23,7 @@ bool UServerRow::Initialize()
 
 void UServerRow::SetServerText(const FString& Text)
 {
-	GetServerName()->SetText(FText::FromString(Text));;
+	GetServerName()->SetText(FText::FromString(Text));
 }
 
 const FString& UServerRow::GetServerText() const

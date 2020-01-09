@@ -20,10 +20,15 @@ class PLATFORMJUMPERGAME_API UPlatformsGameInstance : public UGameInstance, publ
 public:
 	UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 
-	UFUNCTION(BlueprintCallable)
-		void LoadMainMenu();
-	UFUNCTION(BlueprintCallable)
+
+		virtual void LoadMainMenu() override;
+
 		void LoadGameMenu();
+	
+		void LoadAlertBox(const FString& Text);
+
+	UFUNCTION(BlueprintCallable)
+		void CheckForFailures(const FString& FailText = "Error: Connection Lost");
 
 	/*FORCEINLINE TArray<FServerProperty>* GetServerPorperties() { return ServerProperties; }*/
 
@@ -32,6 +37,8 @@ protected:
 	virtual void Shutdown();
 
 private:
+	void GeneralErrorHandler(const FString& ErrorText);
+
 	UFUNCTION(Exec)
 		virtual void HostGame(const FString& HostName) override;
 	UFUNCTION(Exec)
@@ -49,13 +56,16 @@ private:
 	void OnFindSessionsComplete(bool bSuccess);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult);
 	void OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString);
+	// **************************** DELEGATES ************************ // 
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
 	TSubclassOf<UUserWidget> GameMenuClass;
+	TSubclassOf<UUserWidget> AlertBoxClass;
 
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;
+	class UAlertBox* AlertBoxWidget;
 	// ****************************MENU VARS************************ //
 
 	
@@ -63,4 +73,9 @@ private:
 	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;
 	const static FName SESSION_HOST_NAME_KEY;
+
+	bool bFailStatus = false;
+
+public:
+	FORCEINLINE void SetFailStatus(bool bStatus) { bFailStatus = bStatus; }
 };

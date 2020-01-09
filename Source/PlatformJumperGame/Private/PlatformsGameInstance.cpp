@@ -6,13 +6,14 @@
 #include "MainMenu.h"
 #include "GameMenu.h"
 #include "ServerRow.h"
+#include "AlertBox.h"
 
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Engine/LocalPlayer.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
-#include "Engine/Engine.h"
+#include "Engine/Engine.h" // consider removing
 
 const FName UPlatformsGameInstance::SESSION_NAME = "GameSession";
 const FName UPlatformsGameInstance::SESSION_HOST_NAME_KEY = "SessionHostName";
@@ -24,11 +25,16 @@ UPlatformsGameInstance::UPlatformsGameInstance(const FObjectInitializer& ObjectI
 
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_GameMenuClass(TEXT("/Game/MenuSystem/Widgets/WBP_GameMenu"));
 	GameMenuClass = (WBP_GameMenuClass.Class ? WBP_GameMenuClass.Class : nullptr);
+
+	ConstructorHelpers::FClassFinder<UUserWidget> WBP_AlertBoxClass(TEXT("/Game/MenuSystem/Widgets/WBP_AlertBox"));
+	AlertBoxClass = (WBP_AlertBoxClass.Class ? WBP_AlertBoxClass.Class : nullptr);
 }
 
 void UPlatformsGameInstance::LoadMainMenu()
 {
 	MainMenuWidget = (MainMenuClass ? CreateWidget<UMainMenu>(this, MainMenuClass) : nullptr);
+
+	SetFailStatus(false);
 
 	if (MainMenuWidget)
 	{
@@ -46,6 +52,26 @@ void UPlatformsGameInstance::LoadGameMenu()
 		GameMenuWidget->SetMenuInterface(this);
 		GameMenuWidget->SetupGameMenu();
 	}
+}
+
+void UPlatformsGameInstance::LoadAlertBox(const FString& Text)
+{
+	AlertBoxWidget = (AlertBoxClass ? CreateWidget<UAlertBox>(this, AlertBoxClass) : nullptr);
+
+	if (AlertBoxWidget)
+	{
+		AlertBoxWidget->SetMenuInterface(this);
+		AlertBoxWidget->SetupAlertBox();
+		AlertBoxWidget->SetErrorText(Text);
+	}
+}
+
+void UPlatformsGameInstance::CheckForFailures(const FString& FailText)
+{
+	if (bFailStatus)
+		LoadAlertBox(FailText);
+	else
+		LoadMainMenu();
 }
 
 void UPlatformsGameInstance::Init()
@@ -72,6 +98,13 @@ void UPlatformsGameInstance::Init()
 void UPlatformsGameInstance::Shutdown()
 {
 	SessionInterface->DestroySession(SESSION_NAME);
+}
+
+void UPlatformsGameInstance::GeneralErrorHandler(const FString& ErrorText)
+{
+	// Consider remaking it with delegates
+	SetFailStatus(true);
+	QuitToMainMenu();
 }
 
 void UPlatformsGameInstance::HostGame(const FString& HostName)
@@ -185,44 +218,48 @@ void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSes
 
 void UPlatformsGameInstance::OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString)
 {
+	FString FailErrorText;
 	switch (InFailureType)
 	{
 		case ENetworkFailure::NetDriverAlreadyExists:
-			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverAlreadyExists"))
+			FailErrorText = "NetDriverAlreadyExists";
 			break;
 		case ENetworkFailure::NetDriverCreateFailure:
-			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverAlreadyExists"))
+			FailErrorText = "NetDriverAlreadyExists";
 			break;
 		case ENetworkFailure::NetDriverListenFailure:
-			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverListenFailure"))
+			FailErrorText = "NetDriverListenFailure";
 			break;
 		case ENetworkFailure::ConnectionLost:
-			UE_LOG(LogTemp, Warning, TEXT("WTF ConnectionLost"))
+			FailErrorText = "ConnectionLost";
 			break;
 		case ENetworkFailure::ConnectionTimeout:
-			UE_LOG(LogTemp, Warning, TEXT("WTF ConnectionTimeout"))
+			FailErrorText = "ConnectionTimeout";
 			break;
 		case ENetworkFailure::FailureReceived:
-			UE_LOG(LogTemp, Warning, TEXT("WTF FailureReceived"))
+			FailErrorText = "FailureReceived";
 			break;
 		case ENetworkFailure::OutdatedClient:
-			UE_LOG(LogTemp, Warning, TEXT("WTF OutdatedClient"))
+			FailErrorText = "OutdatedClient";
 			break;
 		case ENetworkFailure::OutdatedServer:
-			UE_LOG(LogTemp, Warning, TEXT("WTF OutdatedServer"))
+			FailErrorText = "OutdatedServer";
 			break;
 		case ENetworkFailure::PendingConnectionFailure:
-			UE_LOG(LogTemp, Warning, TEXT("WTF PendingConnectionFailure"))
+			FailErrorText = "PendingConnectionFailure";
 				break;
 		case ENetworkFailure::NetGuidMismatch:
-			UE_LOG(LogTemp, Warning, TEXT("WTF NetGuidMismatch"))
+			FailErrorText = "NetGuidMismatch";
 				break;
 		case ENetworkFailure::NetChecksumMismatch:
-			UE_LOG(LogTemp, Warning, TEXT("WTF NetChecksumMismatch"))
+			FailErrorText = "NetChecksumMismatch";
 			break;
 		default:
-			UE_LOG(LogTemp, Warning, TEXT("WTF UNKNOWN"))
+			FailErrorText = "UNKNOWN";
 			break;
 	}
-	QuitToMainMenu();
+
+	FailErrorText = InString;
+
+	GeneralErrorHandler(FailErrorText);	
 }
