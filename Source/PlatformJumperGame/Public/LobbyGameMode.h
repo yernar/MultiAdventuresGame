@@ -26,8 +26,5 @@ public:
 		void TravelGameMap();
 
 private:
-	int NumPlayers = 0;	
-
-	FTimerHandle TimerHandle;
-	
+	int NumPlayers = 0;		
 };

@@ -23,6 +23,11 @@ class PLATFORMJUMPERGAME_API AMainPlayerState : public APlayerState
 public:
 	UFUNCTION(Server, Unreliable)
 		void ReadyStatus(EPlayerReadinessStatus PlayerStatus);
+
+	UFUNCTION()
+		void NotEnoughPlayersHandle();
 	
 	EPlayerReadinessStatus PlayerReadinessStatus = EPlayerReadinessStatus::NOT_READY;
+
+	FTimerHandle TimerHandle;
 };

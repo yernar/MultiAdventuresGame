@@ -19,11 +19,29 @@ void ALobbyHUD::DrawHUD()
 		APlayerController* APC = GetOwningPlayerController();
 		AMainPlayerState* AMPS = Cast<AMainPlayerState>(APC->PlayerState);
 		EPlayerReadinessStatus PlayerStatus = AMPS->PlayerReadinessStatus;
-		FString Status = (PlayerStatus == EPlayerReadinessStatus::NOT_READY ? "Not Ready"
-			: (PlayerStatus == EPlayerReadinessStatus::NOT_ENOUGH_PLAYERS ? "Not Enough Players"
-				: "Ready"));
 
-		DrawText("Press R to Toggle Your Status: ", FLinearColor::Blue, 10.f, 10.f, FredokaFont);
-		DrawText(Status, FLinearColor::Green, 250.f, 10.f, FredokaFont);
+		FString StatusText;
+		FLinearColor TextColor;
+
+		switch (PlayerStatus)
+		{
+			case EPlayerReadinessStatus::NOT_ENOUGH_PLAYERS:
+				StatusText = "Not Enough Players";
+				TextColor = FLinearColor::Gray;
+				break;
+
+			case EPlayerReadinessStatus::NOT_READY:
+				StatusText = "Not Ready";
+				TextColor = FLinearColor::Red;
+				break;
+
+			case EPlayerReadinessStatus::READY:
+				StatusText = "Ready";
+				TextColor = FLinearColor::Green;
+				break;
+		}
+
+		DrawText("Press R to Toggle Your Status: ", FLinearColor::Blue, 10.f, 10.f, FredokaFont, 2.f);
+		DrawText(StatusText, TextColor, 375.f, 10.f, FredokaFont, 2.f);
 	}
 }

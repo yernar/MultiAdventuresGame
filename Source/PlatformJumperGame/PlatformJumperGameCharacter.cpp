@@ -152,9 +152,12 @@ void APlatformJumperGameCharacter::CallGameMenu()
 
 void APlatformJumperGameCharacter::ToggleStatusReadiness()
 {
-	AMainPlayerState* MainPlayerState = Cast<AMainPlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
-	MainPlayerState->ReadyStatus( (MainPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
-		EPlayerReadinessStatus::READY : EPlayerReadinessStatus::NOT_READY) );
+	if (GetWorld()->GetMapName() == "Lobby")
+	{
+		AMainPlayerState* MainPlayerState = Cast<AMainPlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
+		MainPlayerState->ReadyStatus((MainPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
+			EPlayerReadinessStatus::READY : EPlayerReadinessStatus::NOT_READY));
+	}
 
 
 }

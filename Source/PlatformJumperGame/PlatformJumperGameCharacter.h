@@ -43,7 +43,7 @@ protected:
 	/** Calling Game Menu */
 	void CallGameMenu();
 
-	/** Toggling Readiness Status */
+	/** Toggling Readiness Status Event */
 	void ToggleStatusReadiness();
 
 	/** 

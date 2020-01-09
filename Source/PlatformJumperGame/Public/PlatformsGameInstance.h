@@ -48,6 +48,7 @@ private:
 	void OnDestroySessionComplete(FName SessionName, bool bSuccess);
 	void OnFindSessionsComplete(bool bSuccess);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult);
+	void OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString);
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;

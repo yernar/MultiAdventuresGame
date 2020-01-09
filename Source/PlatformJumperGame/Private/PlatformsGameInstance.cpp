@@ -12,6 +12,7 @@
 #include "Engine/LocalPlayer.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
+#include "Engine/Engine.h"
 
 const FName UPlatformsGameInstance::SESSION_NAME = "GameSession";
 const FName UPlatformsGameInstance::SESSION_HOST_NAME_KEY = "SessionHostName";
@@ -54,7 +55,7 @@ void UPlatformsGameInstance::Init()
 
 	if (SessionInterface.IsValid())
 	{		
-		// TODO: Remove on destroy complete delegate, there is no need for this. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
+		// TODO: Remove on destroy complete delegate, there is no need for that. Destroy sessions on quitting the game(host) and maybe add extra check if session exists in host game function
 		SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnCreateSessionComplete);
 		SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnDestroySessionComplete);
 		SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPlatformsGameInstance::OnFindSessionsComplete);
@@ -62,9 +63,10 @@ void UPlatformsGameInstance::Init()
 
 		SessionSearch = MakeShareable(new FOnlineSessionSearch);
 		SessionSearch->MaxSearchResults = 100;
-		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		
+		SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);		
 	}
+
+	GEngine->OnNetworkFailure().AddUObject(this, &UPlatformsGameInstance::OnHandleNetworkError);
 }
 
 void UPlatformsGameInstance::Shutdown()
@@ -179,4 +181,48 @@ void UPlatformsGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSes
 #endif
 
 	GetFirstLocalPlayerController(GetWorld())->ClientTravel(ResolvedURL, ETravelType::TRAVEL_Absolute);
+}
+
+void UPlatformsGameInstance::OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString)
+{
+	switch (InFailureType)
+	{
+		case ENetworkFailure::NetDriverAlreadyExists:
+			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverAlreadyExists"))
+			break;
+		case ENetworkFailure::NetDriverCreateFailure:
+			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverAlreadyExists"))
+			break;
+		case ENetworkFailure::NetDriverListenFailure:
+			UE_LOG(LogTemp, Warning, TEXT("WTF NetDriverListenFailure"))
+			break;
+		case ENetworkFailure::ConnectionLost:
+			UE_LOG(LogTemp, Warning, TEXT("WTF ConnectionLost"))
+			break;
+		case ENetworkFailure::ConnectionTimeout:
+			UE_LOG(LogTemp, Warning, TEXT("WTF ConnectionTimeout"))
+			break;
+		case ENetworkFailure::FailureReceived:
+			UE_LOG(LogTemp, Warning, TEXT("WTF FailureReceived"))
+			break;
+		case ENetworkFailure::OutdatedClient:
+			UE_LOG(LogTemp, Warning, TEXT("WTF OutdatedClient"))
+			break;
+		case ENetworkFailure::OutdatedServer:
+			UE_LOG(LogTemp, Warning, TEXT("WTF OutdatedServer"))
+			break;
+		case ENetworkFailure::PendingConnectionFailure:
+			UE_LOG(LogTemp, Warning, TEXT("WTF PendingConnectionFailure"))
+				break;
+		case ENetworkFailure::NetGuidMismatch:
+			UE_LOG(LogTemp, Warning, TEXT("WTF NetGuidMismatch"))
+				break;
+		case ENetworkFailure::NetChecksumMismatch:
+			UE_LOG(LogTemp, Warning, TEXT("WTF NetChecksumMismatch"))
+			break;
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("WTF UNKNOWN"))
+			break;
+	}
+	QuitToMainMenu();
 }

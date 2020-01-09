@@ -7,8 +7,22 @@
 
 void AMainPlayerState::ReadyStatus_Implementation(EPlayerReadinessStatus PlayerStatus)
 {
-	PlayerReadinessStatus = ((GetWorld()->GetAuthGameMode())->GetNumPlayers() == 1 ? 
-		EPlayerReadinessStatus::NOT_ENOUGH_PLAYERS : PlayerStatus);
+	if ((GetWorld()->GetAuthGameMode())->GetNumPlayers() == 1)
+	{	
+		PlayerReadinessStatus = EPlayerReadinessStatus::NOT_ENOUGH_PLAYERS;
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AMainPlayerState::NotEnoughPlayersHandle, 1.5f, false);
+	}
 
-	Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode())->CheckPlayersReadiness();
+	else 
+	{
+		PlayerReadinessStatus = PlayerStatus;
+		Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode())->CheckPlayersReadiness();
+	}
+	
+}
+
+void AMainPlayerState::NotEnoughPlayersHandle()
+{
+	PlayerReadinessStatus = EPlayerReadinessStatus::NOT_READY;
+	GetWorldTimerManager().ClearTimer(TimerHandle);
 }

@@ -13,28 +13,23 @@ ALobbyGameMode::ALobbyGameMode()
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
-	Super::PostLogin(NewPlayer);
-
-	++NumPlayers;		
+	Super::PostLogin(NewPlayer);	
 }
 
 void ALobbyGameMode::Logout(AController* Exiting)
 {
 	Super::Logout(Exiting);
-
-	--NumPlayers;
 }
 
 void ALobbyGameMode::CheckPlayersReadiness()
 {
-	for (const auto* PS : Cast<AGameStateBase>(GetWorld()->GetGameState())->PlayerArray)
+	for (const auto* PlayerState : Cast<AGameStateBase>(GetWorld()->GetGameState())->PlayerArray)
 	{
-		EPlayerReadinessStatus PlayersStatus = Cast<AMainPlayerState>(PS)->PlayerReadinessStatus;
+		EPlayerReadinessStatus PlayersStatus = Cast<AMainPlayerState>(PlayerState)->PlayerReadinessStatus;
 		if (PlayersStatus != EPlayerReadinessStatus::READY)
 			return;
 	}
-	TravelGameMap();
-	// GetWorldTimerManager().SetTimer(TimerHandle, this, &ALobbyGameMode::TravelGameMap, 10.f, false);
+	TravelGameMap();	
 }
 
 void ALobbyGameMode::TravelGameMap()
