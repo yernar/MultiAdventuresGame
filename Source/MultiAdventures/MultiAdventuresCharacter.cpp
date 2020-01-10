@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Yernar Aldabergenov. All Rights Reserved.
 
 #include "MultiAdventuresCharacter.h"
-#include "PlatformsGameInstance.h"
+#include "MultiGameInstance.h"
 #include "MainPlayerState.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
@@ -146,7 +146,7 @@ void AMultiAdventuresCharacter::MoveRight(float Value)
 
 void AMultiAdventuresCharacter::CallGameMenu()
 {
-	Cast<UPlatformsGameInstance>(GetGameInstance())->LoadGameMenu();
+	Cast<UMultiGameInstance>(GetGameInstance())->LoadGameMenu();
 	TogglePlayerCharacterInput(false);
 }
 

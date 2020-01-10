@@ -7,18 +7,18 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "PlatformsGameInstance.generated.h"
+#include "MultiGameInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MULTIADVENTURES_API UPlatformsGameInstance : public UGameInstance, public IMenuInterface
+class MULTIADVENTURES_API UMultiGameInstance : public UGameInstance, public IMenuInterface
 {
 	GENERATED_BODY()
 	
 public:
-	UPlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
+	UMultiGameInstance(const FObjectInitializer& ObjectInitializer);
 
 
 		virtual void LoadMainMenu() override;
