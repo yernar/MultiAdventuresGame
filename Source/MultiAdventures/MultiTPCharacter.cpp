@@ -1,8 +1,8 @@
 // Copyright (C) 2019 Yernar Aldabergenov. All Rights Reserved.
 
-#include "MultiAdventuresCharacter.h"
+#include "MultiTPCharacter.h"
 #include "MultiGameInstance.h"
-#include "MainPlayerState.h"
+#include "MultiPlayerState.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -13,9 +13,9 @@
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
-// AMultiAdventuresCharacter
+// AMultiTPCharacter
 
-AMultiAdventuresCharacter::AMultiAdventuresCharacter()
+AMultiTPCharacter::AMultiTPCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -55,67 +55,67 @@ AMultiAdventuresCharacter::AMultiAdventuresCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AMultiAdventuresCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AMultiTPCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &AMultiAdventuresCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMultiAdventuresCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMultiTPCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMultiTPCharacter::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &AMultiAdventuresCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis("TurnRate", this, &AMultiTPCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &AMultiAdventuresCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &AMultiTPCharacter::LookUpAtRate);
 
 	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AMultiAdventuresCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AMultiAdventuresCharacter::TouchStopped);
+	PlayerInputComponent->BindTouch(IE_Pressed, this, &AMultiTPCharacter::TouchStarted);
+	PlayerInputComponent->BindTouch(IE_Released, this, &AMultiTPCharacter::TouchStopped);
 
 	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AMultiAdventuresCharacter::OnResetVR);
+	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AMultiTPCharacter::OnResetVR);
 
 	// Calling game menu
-	PlayerInputComponent->BindAction("CallGameMenu", IE_Pressed, this, &AMultiAdventuresCharacter::CallGameMenu);
+	PlayerInputComponent->BindAction("CallGameMenu", IE_Pressed, this, &AMultiTPCharacter::CallGameMenu);
 
 	// Toggling status readiness
-	PlayerInputComponent->BindAction("ToggleReadinessStatus", IE_Pressed, this, &AMultiAdventuresCharacter::ToggleStatusReadiness);
+	PlayerInputComponent->BindAction("ToggleReadinessStatus", IE_Pressed, this, &AMultiTPCharacter::ToggleStatusReadiness);
 }
 
 
-void AMultiAdventuresCharacter::OnResetVR()
+void AMultiTPCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
-void AMultiAdventuresCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
+void AMultiTPCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		Jump();
 }
 
-void AMultiAdventuresCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
+void AMultiTPCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 		StopJumping();
 }
 
-void AMultiAdventuresCharacter::TurnAtRate(float Rate)
+void AMultiTPCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AMultiAdventuresCharacter::LookUpAtRate(float Rate)
+void AMultiTPCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AMultiAdventuresCharacter::MoveForward(float Value)
+void AMultiTPCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
@@ -129,7 +129,7 @@ void AMultiAdventuresCharacter::MoveForward(float Value)
 	}
 }
 
-void AMultiAdventuresCharacter::MoveRight(float Value)
+void AMultiTPCharacter::MoveRight(float Value)
 {
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
@@ -144,18 +144,18 @@ void AMultiAdventuresCharacter::MoveRight(float Value)
 	}
 }
 
-void AMultiAdventuresCharacter::CallGameMenu()
+void AMultiTPCharacter::CallGameMenu()
 {
 	Cast<UMultiGameInstance>(GetGameInstance())->LoadGameMenu();
 	TogglePlayerCharacterInput(false);
 }
 
-void AMultiAdventuresCharacter::ToggleStatusReadiness()
+void AMultiTPCharacter::ToggleStatusReadiness()
 {
 	if (GetWorld()->GetMapName() == "Lobby")
 	{
-		AMainPlayerState* MainPlayerState = Cast<AMainPlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
-		MainPlayerState->ReadyStatus((MainPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
+		AMultiPlayerState* MultiPlayerState = Cast<AMultiPlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
+		MultiPlayerState->ReadyStatus((MultiPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
 			EPlayerReadinessStatus::READY : EPlayerReadinessStatus::NOT_READY));
 	}
 

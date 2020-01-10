@@ -2,7 +2,7 @@
 
 
 #include "LobbyHUD.h"
-#include "MainPlayerState.h"
+#include "MultiPlayerState.h"
 
 #include "Engine/Font.h"
 
@@ -14,10 +14,10 @@ ALobbyHUD::ALobbyHUD(const FObjectInitializer& ObjectInitializer) : Super(Object
 
 void ALobbyHUD::DrawHUD()
 {
-	if (GetOwningPlayerController() && Cast<AMainPlayerState>(GetOwningPlayerController()->PlayerState))
+	if (GetOwningPlayerController() && Cast<AMultiPlayerState>(GetOwningPlayerController()->PlayerState))
 	{
 		APlayerController* APC = GetOwningPlayerController();
-		AMainPlayerState* AMPS = Cast<AMainPlayerState>(APC->PlayerState);
+		AMultiPlayerState* AMPS = Cast<AMultiPlayerState>(APC->PlayerState);
 		EPlayerReadinessStatus PlayerStatus = AMPS->PlayerReadinessStatus;
 
 		FString StatusText;

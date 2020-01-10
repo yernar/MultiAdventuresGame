@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
-#include "MainPlayerState.generated.h"
+#include "MultiPlayerState.generated.h"
 
 
 UENUM()
@@ -16,7 +16,7 @@ enum class EPlayerReadinessStatus : uint32
 };
 
 UCLASS()
-class MULTIADVENTURES_API AMainPlayerState : public APlayerState
+class MULTIADVENTURES_API AMultiPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	

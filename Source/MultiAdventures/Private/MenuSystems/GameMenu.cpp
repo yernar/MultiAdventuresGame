@@ -2,7 +2,7 @@
 
 
 #include "GameMenu.h"
-#include "MultiAdventuresCharacter.h"
+#include "MultiTPCharacter.h"
 
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
@@ -42,7 +42,7 @@ void UGameMenu::OnCancelButtonClicked()
 {
 	TeardownGameMenu();
 
-	Cast<AMultiAdventuresCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn())->TogglePlayerCharacterInput(true);
+	Cast<AMultiTPCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn())->TogglePlayerCharacterInput(true);
 }
 
 void UGameMenu::OnQuitButtonClicked()

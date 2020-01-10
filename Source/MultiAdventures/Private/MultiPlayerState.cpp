@@ -1,16 +1,16 @@
 // Copyright (C) 2019 Yernar Aldabergenov. All Rights Reserved.
 
 
-#include "MainPlayerState.h"
+#include "MultiPlayerState.h"
 
 #include "LobbyGameMode.h"
 
-void AMainPlayerState::ReadyStatus_Implementation(EPlayerReadinessStatus PlayerStatus)
+void AMultiPlayerState::ReadyStatus_Implementation(EPlayerReadinessStatus PlayerStatus)
 {
 	if ((GetWorld()->GetAuthGameMode())->GetNumPlayers() == 1)
 	{	
 		PlayerReadinessStatus = EPlayerReadinessStatus::NOT_ENOUGH_PLAYERS;
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &AMainPlayerState::NotEnoughPlayersHandle, 1.5f, false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &AMultiPlayerState::NotEnoughPlayersHandle, 1.5f, false);
 	}
 
 	else 
@@ -21,7 +21,7 @@ void AMainPlayerState::ReadyStatus_Implementation(EPlayerReadinessStatus PlayerS
 	
 }
 
-void AMainPlayerState::NotEnoughPlayersHandle()
+void AMultiPlayerState::NotEnoughPlayersHandle()
 {
 	PlayerReadinessStatus = EPlayerReadinessStatus::NOT_READY;
 	GetWorldTimerManager().ClearTimer(TimerHandle);

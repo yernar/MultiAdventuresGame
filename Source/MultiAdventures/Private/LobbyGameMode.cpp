@@ -2,7 +2,7 @@
 
 
 #include "LobbyGameMode.h"
-#include "MainPlayerState.h"
+#include "MultiPlayerState.h"
 
 #include "GameFramework\GameStateBase.h"
 
@@ -25,7 +25,7 @@ void ALobbyGameMode::CheckPlayersReadiness()
 {
 	for (const auto* PlayerState : Cast<AGameStateBase>(GetWorld()->GetGameState())->PlayerArray)
 	{
-		EPlayerReadinessStatus PlayersStatus = Cast<AMainPlayerState>(PlayerState)->PlayerReadinessStatus;
+		EPlayerReadinessStatus PlayersStatus = Cast<AMultiPlayerState>(PlayerState)->PlayerReadinessStatus;
 		if (PlayersStatus != EPlayerReadinessStatus::READY)
 			return;
 	}

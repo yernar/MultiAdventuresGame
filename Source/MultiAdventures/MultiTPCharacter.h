@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MultiAdventuresCharacter.generated.h"
+#include "MultiTPCharacter.generated.h"
 
 UCLASS(config=Game)
-class AMultiAdventuresCharacter : public ACharacter
+class AMultiTPCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -19,7 +19,7 @@ class AMultiAdventuresCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 public:
-	AMultiAdventuresCharacter();
+	AMultiTPCharacter();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
