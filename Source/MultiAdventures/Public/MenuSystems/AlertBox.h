@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API UAlertBox : public UUserWidget
+class MULTIADVENTURES_API UAlertBox : public UUserWidget
 {
 	GENERATED_BODY()
 

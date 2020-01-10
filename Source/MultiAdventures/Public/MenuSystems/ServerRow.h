@@ -21,7 +21,7 @@ struct FServerProperty
 };
 
 UCLASS()
-class PLATFORMJUMPERGAME_API UServerRow : public UUserWidget
+class MULTIADVENTURES_API UServerRow : public UUserWidget
 {
 	GENERATED_BODY()
 

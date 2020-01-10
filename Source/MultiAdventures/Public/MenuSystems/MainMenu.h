@@ -18,7 +18,7 @@ enum class EMenuTypes : uint32
 };
 
 UCLASS()
-class PLATFORMJUMPERGAME_API UMainMenu : public UUserWidget
+class MULTIADVENTURES_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
 

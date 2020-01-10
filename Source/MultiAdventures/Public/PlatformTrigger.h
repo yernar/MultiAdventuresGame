@@ -7,7 +7,7 @@
 #include "PlatformTrigger.generated.h"
 
 UCLASS()
-class PLATFORMJUMPERGAME_API APlatformTrigger : public AActor
+class MULTIADVENTURES_API APlatformTrigger : public AActor
 {
 	GENERATED_BODY()
 	

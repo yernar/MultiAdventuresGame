@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlatformJumperGameGameMode.h"
+#include "MultiAdventuresGameMode.h"
 #include "LobbyGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API ALobbyGameMode : public APlatformJumperGameGameMode
+class MULTIADVENTURES_API ALobbyGameMode : public AMultiAdventuresGameMode
 {
 	GENERATED_BODY()
 

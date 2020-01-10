@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API ALobbyHUD : public AHUD
+class MULTIADVENTURES_API ALobbyHUD : public AHUD
 {
 	GENERATED_BODY()
 public:

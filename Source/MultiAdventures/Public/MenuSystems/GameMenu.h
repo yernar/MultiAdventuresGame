@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API UGameMenu : public UUserWidget
+class MULTIADVENTURES_API UGameMenu : public UUserWidget
 {
 	GENERATED_BODY()
 

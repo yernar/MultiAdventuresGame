@@ -16,7 +16,7 @@ enum class EPlayerReadinessStatus : uint32
 };
 
 UCLASS()
-class PLATFORMJUMPERGAME_API AMainPlayerState : public APlayerState
+class MULTIADVENTURES_API AMainPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	

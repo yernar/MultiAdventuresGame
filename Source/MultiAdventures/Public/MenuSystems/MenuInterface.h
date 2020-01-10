@@ -16,7 +16,7 @@ class UMenuInterface : public UInterface
 /**
  * 
  */
-class PLATFORMJUMPERGAME_API IMenuInterface
+class MULTIADVENTURES_API IMenuInterface
 {
 	GENERATED_BODY()
 

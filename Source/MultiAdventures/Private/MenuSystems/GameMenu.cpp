@@ -2,7 +2,7 @@
 
 
 #include "GameMenu.h"
-#include "PlatformJumperGameCharacter.h"
+#include "MultiAdventuresCharacter.h"
 
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
@@ -42,7 +42,7 @@ void UGameMenu::OnCancelButtonClicked()
 {
 	TeardownGameMenu();
 
-	Cast<APlatformJumperGameCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn())->TogglePlayerCharacterInput(true);
+	Cast<AMultiAdventuresCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn())->TogglePlayerCharacterInput(true);
 }
 
 void UGameMenu::OnQuitButtonClicked()

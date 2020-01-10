@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class PlatformJumperGame : ModuleRules
+public class MultiAdventures : ModuleRules
 {
-	public PlatformJumperGame(ReadOnlyTargetRules Target) : base(Target)
+	public MultiAdventures(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 

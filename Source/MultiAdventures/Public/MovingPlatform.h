@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class PLATFORMJUMPERGAME_API AMovingPlatform : public AStaticMeshActor
+class MULTIADVENTURES_API AMovingPlatform : public AStaticMeshActor
 {
 	GENERATED_BODY()
 
