@@ -20,13 +20,9 @@ class MULTIADVENTURES_API UMultiGameInstance : public UGameInstance, public IMen
 public:
 	UMultiGameInstance(const FObjectInitializer& ObjectInitializer);
 
-	UFUNCTION(BlueprintCallable)
-		void LoadMainMenu();
-
+	void LoadMainMenu();
 	void LoadGameMenu();	
 	void LoadAlertBox(const FString& Text);
-
-	/*FORCEINLINE TArray<FServerProperty>* GetServerPorperties() { return ServerProperties; }*/
 
 protected:
 	virtual void Init();
@@ -54,7 +50,7 @@ private:
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult);
 	void OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString);
 	void OnHandleTravelFailure(UWorld* InWorld, ETravelFailure::Type InFailureType, const FString& InString);
-	// **************************** DELEGATES ************************ // 
+	// ************************************************************* // 
 
 	// ****************************MENU VARS************************ //
 	TSubclassOf<class UUserWidget> MainMenuClass;
@@ -64,14 +60,20 @@ private:
 	class UMainMenu* MainMenuWidget;
 	class UGameMenu* GameMenuWidget;
 	class UAlertBox* AlertBoxWidget;
-	// ****************************MENU VARS************************ //
+	// ************************************************************ //
 	
 	// **************************** OSS ************************ //
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;	
 	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;
 	const static FName SESSION_HOST_NAME_KEY;
-	// **************************** OSS ************************ //
+	// ******************************************************** //
 
 	TOptional<FString> ErrorText;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE UMainMenu* GetMainMenuWidget() { return MainMenuWidget; }
+	/*class UGameMenu* GameMenuWidget;
+	class UAlertBox* AlertBoxWidget;*/
 };

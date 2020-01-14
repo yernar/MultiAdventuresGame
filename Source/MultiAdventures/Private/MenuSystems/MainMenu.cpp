@@ -184,3 +184,17 @@ void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type Com
 	if (CommitMethod == ETextCommit::OnEnter)
 		OnHostGameClicked();
 }
+
+void UMainMenu::BackToMainMenu()
+{
+	if (MenuSwitcher)
+		switch (MenuSwitcher->GetActiveWidgetIndex())
+		{
+			case int32(EMenuTypes::HOST_MENU):
+				MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
+			case int32(EMenuTypes::JOIN_MENU):
+				MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
+		default:
+			break;
+		} 
+}

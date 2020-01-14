@@ -11,7 +11,7 @@ void UAlertBox::SetupAlertBox()
 	this->AddToViewport();
 
 	FInputModeUIOnly UIInputMode;
-	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;

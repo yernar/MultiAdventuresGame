@@ -120,4 +120,7 @@ private:
 		void OnHostGameClicked();
 	UFUNCTION()
 		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+
+	UFUNCTION(BlueprintCallable)
+		void BackToMainMenu();
 };
