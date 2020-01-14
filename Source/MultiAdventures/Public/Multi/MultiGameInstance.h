@@ -20,15 +20,11 @@ class MULTIADVENTURES_API UMultiGameInstance : public UGameInstance, public IMen
 public:
 	UMultiGameInstance(const FObjectInitializer& ObjectInitializer);
 
-
-		virtual void LoadMainMenu() override;
-
-		void LoadGameMenu();
-	
-		void LoadAlertBox(const FString& Text);
-
 	UFUNCTION(BlueprintCallable)
-		void CheckForFailures(const FString& FailText = "Error: Connection Lost");
+		void LoadMainMenu();
+
+	void LoadGameMenu();	
+	void LoadAlertBox(const FString& Text);
 
 	/*FORCEINLINE TArray<FServerProperty>* GetServerPorperties() { return ServerProperties; }*/
 
@@ -37,18 +33,19 @@ protected:
 	virtual void Shutdown();
 
 private:
-	void GeneralErrorHandler(const FString& ErrorText);
-
-	UFUNCTION(Exec)
+	UFUNCTION()
 		virtual void HostGame(const FString& HostName) override;
-	UFUNCTION(Exec)
+	UFUNCTION()
 		virtual void JoinGame(uint32 ServerIndex) override;
-	UFUNCTION(Exec)
+	UFUNCTION()
 		virtual void QuitToMainMenu() override;
-	UFUNCTION(Exec)
+	UFUNCTION()
 		virtual void QuitFromMainMenu() override;
-	UFUNCTION(Exec)
+	UFUNCTION()
 		virtual void RefreshServers() override;
+
+	UFUNCTION()
+		void GeneralErrorHandler();
 
 	// **************************** DELEGATES ************************ // 
 	void OnCreateSessionComplete(FName SessionName, bool bSuccess);
@@ -56,6 +53,7 @@ private:
 	void OnFindSessionsComplete(bool bSuccess);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult);
 	void OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString);
+	void OnHandleTravelFailure(UWorld* InWorld, ETravelFailure::Type InFailureType, const FString& InString);
 	// **************************** DELEGATES ************************ // 
 
 	// ****************************MENU VARS************************ //
@@ -67,15 +65,13 @@ private:
 	class UGameMenu* GameMenuWidget;
 	class UAlertBox* AlertBoxWidget;
 	// ****************************MENU VARS************************ //
-
 	
+	// **************************** OSS ************************ //
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;	
 	IOnlineSessionPtr SessionInterface;
 	const static FName SESSION_NAME;
 	const static FName SESSION_HOST_NAME_KEY;
+	// **************************** OSS ************************ //
 
-	bool bFailStatus = false;
-
-public:
-	FORCEINLINE void SetFailStatus(bool bStatus) { bFailStatus = bStatus; }
+	TOptional<FString> ErrorText;
 };

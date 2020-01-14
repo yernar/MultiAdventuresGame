@@ -28,7 +28,5 @@ public:
 	virtual void QuitFromMainMenu() = 0;
 	virtual void RefreshServers() = 0;
 
-	virtual void LoadMainMenu() = 0;
-
 	const static FString UnspecifiedHostName;
 };

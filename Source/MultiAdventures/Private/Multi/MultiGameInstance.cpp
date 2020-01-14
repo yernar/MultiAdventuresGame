@@ -34,10 +34,10 @@ void UMultiGameInstance::LoadMainMenu()
 {
 	MainMenuWidget = (MainMenuClass ? CreateWidget<UMainMenu>(this, MainMenuClass) : nullptr);
 
-	SetFailStatus(false);
-
 	if (MainMenuWidget)
 	{
+		MainMenuWidget->MainMenuLoaded.AddDynamic(this, &UMultiGameInstance::GeneralErrorHandler);
+
 		MainMenuWidget->SetMenuInterface(this);
 		MainMenuWidget->SetupMainMenu();
 	}
@@ -66,14 +66,6 @@ void UMultiGameInstance::LoadAlertBox(const FString& Text)
 	}
 }
 
-void UMultiGameInstance::CheckForFailures(const FString& FailText)
-{
-	if (bFailStatus)
-		LoadAlertBox(FailText);
-	else
-		LoadMainMenu();
-}
-
 void UMultiGameInstance::Init()
 {
 	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
@@ -93,18 +85,12 @@ void UMultiGameInstance::Init()
 	}
 
 	GEngine->OnNetworkFailure().AddUObject(this, &UMultiGameInstance::OnHandleNetworkError);
+	GEngine->OnTravelFailure().AddUObject(this, &UMultiGameInstance::OnHandleTravelFailure);
 }
 
 void UMultiGameInstance::Shutdown()
 {
 	SessionInterface->DestroySession(SESSION_NAME);
-}
-
-void UMultiGameInstance::GeneralErrorHandler(const FString& ErrorText)
-{
-	// Consider remaking it with delegates
-	SetFailStatus(true);
-	QuitToMainMenu();
 }
 
 void UMultiGameInstance::HostGame(const FString& HostName)
@@ -149,6 +135,15 @@ void UMultiGameInstance::RefreshServers()
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
+void UMultiGameInstance::GeneralErrorHandler()
+{
+	if (ErrorText.IsSet())
+	{
+		LoadAlertBox(ErrorText.GetValue());
+		ErrorText.Reset();
+	}
+}
+
 void UMultiGameInstance::OnCreateSessionComplete(FName SessionName, bool bSuccess)
 {
 	if (MainMenuWidget)
@@ -186,7 +181,7 @@ void UMultiGameInstance::OnFindSessionsComplete(bool bSuccess)
 }
 
 void UMultiGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompleteResult)
-{
+{	
 	FString ResolvedURL;
 	SessionInterface->GetResolvedConnectString(SessionName, ResolvedURL);
 #if WITH_EDITOR
@@ -218,48 +213,12 @@ void UMultiGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSession
 
 void UMultiGameInstance::OnHandleNetworkError(UWorld* InWorld, UNetDriver* InNetDriver, ENetworkFailure::Type InFailureType, const FString& InString)
 {
-	FString FailErrorText;
-	switch (InFailureType)
-	{
-		case ENetworkFailure::NetDriverAlreadyExists:
-			FailErrorText = "NetDriverAlreadyExists";
-			break;
-		case ENetworkFailure::NetDriverCreateFailure:
-			FailErrorText = "NetDriverAlreadyExists";
-			break;
-		case ENetworkFailure::NetDriverListenFailure:
-			FailErrorText = "NetDriverListenFailure";
-			break;
-		case ENetworkFailure::ConnectionLost:
-			FailErrorText = "ConnectionLost";
-			break;
-		case ENetworkFailure::ConnectionTimeout:
-			FailErrorText = "ConnectionTimeout";
-			break;
-		case ENetworkFailure::FailureReceived:
-			FailErrorText = "FailureReceived";
-			break;
-		case ENetworkFailure::OutdatedClient:
-			FailErrorText = "OutdatedClient";
-			break;
-		case ENetworkFailure::OutdatedServer:
-			FailErrorText = "OutdatedServer";
-			break;
-		case ENetworkFailure::PendingConnectionFailure:
-			FailErrorText = "PendingConnectionFailure";
-				break;
-		case ENetworkFailure::NetGuidMismatch:
-			FailErrorText = "NetGuidMismatch";
-				break;
-		case ENetworkFailure::NetChecksumMismatch:
-			FailErrorText = "NetChecksumMismatch";
-			break;
-		default:
-			FailErrorText = "UNKNOWN";
-			break;
-	}
+	ErrorText = InString;
+	QuitToMainMenu();
+}
 
-	FailErrorText = InString;
-
-	GeneralErrorHandler(FailErrorText);	
+void UMultiGameInstance::OnHandleTravelFailure(UWorld* InWorld, ETravelFailure::Type InFailureType, const FString& InString)
+{
+	ErrorText = InString;
+	QuitToMainMenu();
 }

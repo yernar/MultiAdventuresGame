@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMainMenuLoaded);
+
 UENUM()
 enum class EMenuTypes : uint32
 {
@@ -16,6 +19,8 @@ enum class EMenuTypes : uint32
 	JOIN_MENU,
 	HOST_MENU
 };
+
+
 
 UCLASS()
 class MULTIADVENTURES_API UMainMenu : public UUserWidget
@@ -35,6 +40,9 @@ public:
 	void ToggleRefreshingServersSectionButtons(bool bIsEnabled);
 
 	static const uint32 UnselectedIndex;
+
+	UPROPERTY(BlueprintAssignable, Category = Delegate)
+		FOnMainMenuLoaded MainMenuLoaded;
 
 protected:
 	virtual bool Initialize() override;

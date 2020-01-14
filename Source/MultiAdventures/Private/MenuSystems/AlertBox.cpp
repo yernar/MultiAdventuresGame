@@ -40,5 +40,4 @@ bool UAlertBox::Initialize()
 void UAlertBox::OnOKButtonClicked()
 {
 	TeardownAlertBox();
-	MenuInterface->LoadMainMenu();
 }

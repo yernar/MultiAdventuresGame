@@ -9,7 +9,7 @@
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
 
-const uint32 UMainMenu::UnselectedIndex = 667;
+const uint32 UMainMenu::UnselectedIndex = 667; // TODO: WTF??
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -25,7 +25,9 @@ void UMainMenu::SetupMainMenu()
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
-	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;	
+	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
+
+	MainMenuLoaded.Broadcast();
 }
 
 void UMainMenu::TeardownMainMenu()
