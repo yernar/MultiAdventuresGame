@@ -3,12 +3,16 @@
 
 #include "LobbyGameMode.h"
 #include "MultiPlayerState.h"
+#include "LobbyHUD.h"
 
 #include "GameFramework\GameStateBase.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	bUseSeamlessTravel = true;
+
+	PlayerStateClass = AMultiPlayerState::StaticClass();
+	HUDClass = ALobbyHUD::StaticClass();
 }
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)

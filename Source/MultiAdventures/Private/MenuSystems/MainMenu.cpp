@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "ServerRow.h"
 #include "MenuInterface.h"
+#include "MenuPlayerController.h"
 
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
@@ -21,7 +22,7 @@ void UMainMenu::SetupMainMenu()
 {
 	this->AddToViewport();
 
-	FInputModeUIOnly UIInputMode;
+	FInputModeGameAndUI UIInputMode;
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);
@@ -90,6 +91,24 @@ void UMainMenu::ToggleRefreshingServersSectionButtons(bool bIsEnabled)
 	JoinGameButton->SetIsEnabled(bIsEnabled);
 }
 
+void UMainMenu::BackToMainMenu()
+{
+	if (MenuSwitcher && BackFromJoinButton->GetIsEnabled())
+	{
+		switch (MenuSwitcher->GetActiveWidgetIndex())
+		{
+		case int32(EMenuTypes::HOST_MENU):
+			HostNameTextBox->SetText(FText()); // Erasing The Text
+			break;
+		case int32(EMenuTypes::JOIN_MENU):
+			ServerList->ClearChildren();
+			break;
+		}
+
+		MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
+	}
+}
+
 bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize())
@@ -103,12 +122,12 @@ bool UMainMenu::Initialize()
 
 	SoloButton->SetIsEnabled(false);
 	
-	BackFromJoinButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromJoinClicked);
+	BackFromJoinButton->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
 	RefreshServersListButton->OnClicked.AddDynamic(this, &UMainMenu::OnRefreshServersListClicked);
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnJoinGameClicked);
 
 	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
-	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::OnBackFromHostClicked);
+	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
 	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);
 
 	/* Solo is Not Available R8 now */
@@ -142,12 +161,6 @@ void UMainMenu::OnQuitFromMainClicked()
 		GetMenuInterface()->QuitFromMainMenu();
 }
 
-void UMainMenu::OnBackFromJoinClicked()
-{
-	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
-	ServerList->ClearChildren();
-}
-
 void UMainMenu::OnRefreshServersListClicked()
 {
 	ServerList->ClearChildren();
@@ -165,12 +178,6 @@ void UMainMenu::OnJoinGameClicked()
 		GetMenuInterface()->JoinGame(SelectedIndex.GetValue());
 }
 
-void UMainMenu::OnBackFromHostClicked()
-{
-	HostNameTextBox->SetText(FText()); // Erasing The Text
-	MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
-}
-
 void UMainMenu::OnHostGameClicked()
 {
 	if (GetMenuInterface())
@@ -183,18 +190,4 @@ void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type Com
 {
 	if (CommitMethod == ETextCommit::OnEnter)
 		OnHostGameClicked();
-}
-
-void UMainMenu::BackToMainMenu()
-{
-	if (MenuSwitcher)
-		switch (MenuSwitcher->GetActiveWidgetIndex())
-		{
-			case int32(EMenuTypes::HOST_MENU):
-				MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
-			case int32(EMenuTypes::JOIN_MENU):
-				MenuSwitcher->SetActiveWidgetIndex(int32(EMenuTypes::MAIN_MENU));
-		default:
-			break;
-		} 
 }

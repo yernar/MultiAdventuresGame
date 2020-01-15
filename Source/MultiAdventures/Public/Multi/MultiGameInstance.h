@@ -72,8 +72,6 @@ private:
 	TOptional<FString> ErrorText;
 
 public:
-	UFUNCTION(BlueprintCallable)
 	FORCEINLINE UMainMenu* GetMainMenuWidget() { return MainMenuWidget; }
-	/*class UGameMenu* GameMenuWidget;
-	class UAlertBox* AlertBoxWidget;*/
+	FORCEINLINE UGameMenu* GetGameMenuWidget() { return GameMenuWidget; }
 };

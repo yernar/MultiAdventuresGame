@@ -3,6 +3,7 @@
 #include "MultiTPCharacter.h"
 #include "MultiGameInstance.h"
 #include "MultiPlayerState.h"
+#include "GameMenu.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -146,8 +147,11 @@ void AMultiTPCharacter::MoveRight(float Value)
 
 void AMultiTPCharacter::CallGameMenu()
 {
-	Cast<UMultiGameInstance>(GetGameInstance())->LoadGameMenu();
-	TogglePlayerCharacterInput(false);
+	(bGameMenuOnScreen 
+		? Cast<UMultiGameInstance>(GetGameInstance())->GetGameMenuWidget()->TeardownGameMenu() 
+		: Cast<UMultiGameInstance>(GetGameInstance())->LoadGameMenu());
+	bGameMenuOnScreen = !bGameMenuOnScreen;
+	// TogglePlayerCharacterInput(false);
 }
 
 void AMultiTPCharacter::ToggleStatusReadiness()
@@ -158,6 +162,4 @@ void AMultiTPCharacter::ToggleStatusReadiness()
 		MultiPlayerState->ReadyStatus((MultiPlayerState->PlayerReadinessStatus == EPlayerReadinessStatus::NOT_READY ?
 			EPlayerReadinessStatus::READY : EPlayerReadinessStatus::NOT_READY));
 	}
-
-
 }

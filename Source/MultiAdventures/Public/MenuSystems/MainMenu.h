@@ -20,8 +20,6 @@ enum class EMenuTypes : uint32
 	HOST_MENU
 };
 
-
-
 UCLASS()
 class MULTIADVENTURES_API UMainMenu : public UUserWidget
 {
@@ -58,7 +56,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* QuitFromMainButton;
-	// ******************************************************* Main Menu Page Components ****************************************************************** //
+	// ******************************************************* ************************* ****************************************************************** //
 
 	// ******************************************************* Join Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
@@ -69,7 +67,7 @@ private:
 		UButton* JoinGameButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
 		class UPanelWidget* ServerList;
-	// ******************************************************* Join Menu Page Components ****************************************************************** //
+	// ******************************************************* ************************* ****************************************************************** //
 
 	// ******************************************************* Host Menu Page Components ****************************************************************** //
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
@@ -78,7 +76,7 @@ private:
 		UButton* HostGameButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
 		class UEditableTextBox* HostNameTextBox;
-	// ******************************************************* Host Menu Page Components ****************************************************************** //
+	// ******************************************************* ************************* ****************************************************************** //
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		class UWidgetSwitcher* MenuSwitcher;
@@ -107,20 +105,25 @@ private:
 	UFUNCTION()
 		void OnQuitFromMainClicked();
 
-	UFUNCTION()
-		void OnBackFromJoinClicked();
+	/* REMOVED: See BackToMainMenu()
+	 UFUNCTION()
+		void OnBackFromJoinClicked();*/
 	UFUNCTION()
 		void OnRefreshServersListClicked();
 	UFUNCTION()
 		void OnJoinGameClicked();	
 
-	UFUNCTION()
-		void OnBackFromHostClicked();
+	/* REMOVED: See BackToMainMenu()
+	 UFUNCTION()
+		void OnBackFromHostClicked();*/
 	UFUNCTION()
 		void OnHostGameClicked();
 	UFUNCTION()
-		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);	
 
-	UFUNCTION(BlueprintCallable)
+	// Step Back From Other Panels to Main Menu Panel
+	UFUNCTION()
 		void BackToMainMenu();
+
+	friend class AMenuPlayerController;
 };

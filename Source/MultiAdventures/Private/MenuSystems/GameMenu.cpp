@@ -11,7 +11,7 @@ void UGameMenu::SetupGameMenu()
 {
 	this->AddToViewport();
 
-	FInputModeUIOnly UIInputMode;
+	FInputModeGameAndUI UIInputMode;
 	UIInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 
 	GetWorld()->GetFirstPlayerController()->SetInputMode(UIInputMode);

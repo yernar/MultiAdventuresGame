@@ -41,8 +41,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 		void OnCancelButtonClicked();
 	UFUNCTION(BlueprintCallable)
-		void OnQuitButtonClicked();
-	
+		void OnQuitButtonClicked();	
 };
 
 

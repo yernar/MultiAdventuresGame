@@ -15,5 +15,7 @@ class MULTIADVENTURES_API AMainMenuGameMode : public AMultiGameMode
 	GENERATED_BODY()
 
 public:
+	AMainMenuGameMode();
+
 	virtual void StartPlay() override;
 };
