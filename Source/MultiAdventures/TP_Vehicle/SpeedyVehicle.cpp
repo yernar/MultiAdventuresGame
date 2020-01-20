@@ -20,7 +20,7 @@ void ASpeedyVehicle::BeginPlay()
 
 void ASpeedyVehicle::MoveForward(float Value)
 {
-	Velocity = GetActorForwardVector() * Speed * Value;
+	Throttle = Value;
 }
 
 // Called every frame
@@ -28,7 +28,13 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	AddActorWorldOffset(Velocity * 100 * DeltaTime);
+	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle;
+	FVector Acceleration = Force / Mass;
+	Velocity += Acceleration * DeltaTime;
+	
+
+	AddActorWorldOffset(Velocity * 100 * DeltaTime); // converting velocity to cm., as initially it was m.
+	
 }
 
 // Called to bind functionality to input

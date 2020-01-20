@@ -32,5 +32,11 @@ public:
 private:
 	FVector Velocity;
 	float Speed = 20.f;
+	float Throttle;
+
+	UPROPERTY(EditDefaultsOnly)
+		float Mass = 1000.f; // kg
+	UPROPERTY(EditDefaultsOnly)
+		float MaxDrivingForce = 10000.f; // N
 
 };
