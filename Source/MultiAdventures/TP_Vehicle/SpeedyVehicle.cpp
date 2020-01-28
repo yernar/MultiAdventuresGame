@@ -23,18 +23,43 @@ void ASpeedyVehicle::MoveForward(float Value)
 	Throttle = Value;
 }
 
+void ASpeedyVehicle::MoveRight(float Value)
+{
+	SteeringThrow = Value;
+}
+
+void ASpeedyVehicle::UpdateLocation(float DeltaTime)
+{
+	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle;
+	FVector Acceleration = Force / Mass;
+	Velocity += Acceleration * DeltaTime;
+
+	HitResult = new FHitResult();
+	AddActorWorldOffset(Velocity * 100 * DeltaTime, true, HitResult); // converting velocity to cm., as initially it was m.
+	
+	if (HitResult->IsValidBlockingHit())
+		Velocity = FVector::ZeroVector;
+
+	delete HitResult;
+}
+
+void ASpeedyVehicle::UpdateRotation(float DeltaTime)
+{
+	float RotationAngleDegrees = MaxDPS * DeltaTime * SteeringThrow;
+	FQuat RotationDelta(GetActorUpVector(), FMath::DegreesToRadians(RotationAngleDegrees));
+
+	Velocity = RotationDelta.RotateVector(Velocity);
+	AddActorWorldRotation(RotationDelta);
+}
+
 // Called every frame
 void ASpeedyVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle;
-	FVector Acceleration = Force / Mass;
-	Velocity += Acceleration * DeltaTime;
 	
-
-	AddActorWorldOffset(Velocity * 100 * DeltaTime); // converting velocity to cm., as initially it was m.
+	UpdateLocation(DeltaTime);
 	
+	UpdateRotation(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -43,6 +68,6 @@ void ASpeedyVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASpeedyVehicle::MoveForward);
-
+	PlayerInputComponent->BindAxis("MoveRight", this, &ASpeedyVehicle::MoveRight);
 }
 

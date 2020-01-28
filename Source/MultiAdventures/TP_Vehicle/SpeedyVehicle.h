@@ -21,6 +21,10 @@ protected:
 
 private:
 	void MoveForward(float Value);
+	void MoveRight(float Value);
+
+	void UpdateLocation(float DeltaTime);
+	void UpdateRotation(float DeltaTime);
 
 public:	
 	// Called every frame
@@ -30,13 +34,25 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	/* kg */
+	UPROPERTY(EditDefaultsOnly, Category = Properties)
+		float Mass = 1000.f;
+
+	/* N */
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+		float MaxDrivingForce = 10000.f; 
+
+	/* Degrees Per Second -- (degrees / sec) */
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+		float MaxDPS = 90.f;
+
 	FVector Velocity;
 	float Speed = 20.f;
+
+	/* will be initialized in Move Events */
 	float Throttle;
+	float SteeringThrow;
+	/* ********************************** */
 
-	UPROPERTY(EditDefaultsOnly)
-		float Mass = 1000.f; // kg
-	UPROPERTY(EditDefaultsOnly)
-		float MaxDrivingForce = 10000.f; // N
-
+	FHitResult* HitResult;
 };
