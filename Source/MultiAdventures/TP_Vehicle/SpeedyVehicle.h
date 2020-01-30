@@ -26,6 +26,8 @@ private:
 	void UpdateLocation(float DeltaTime);
 	void UpdateRotation(float DeltaTime);
 
+	FVector GetAirResistance();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -45,6 +47,10 @@ private:
 	/* Degrees Per Second -- (degrees / sec) */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 		float MaxDPS = 90.f;
+
+	/* The higher drag coefficient is the higher air resistance will be */
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+		float DragCoefficient = 25.f;
 
 	FVector Velocity;
 	float Speed = 20.f;

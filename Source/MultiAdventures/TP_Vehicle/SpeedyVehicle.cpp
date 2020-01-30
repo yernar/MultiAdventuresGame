@@ -30,7 +30,7 @@ void ASpeedyVehicle::MoveRight(float Value)
 
 void ASpeedyVehicle::UpdateLocation(float DeltaTime)
 {
-	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle;
+	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle + GetAirResistance();
 	FVector Acceleration = Force / Mass;
 	Velocity += Acceleration * DeltaTime;
 
@@ -52,14 +52,20 @@ void ASpeedyVehicle::UpdateRotation(float DeltaTime)
 	AddActorWorldRotation(RotationDelta);
 }
 
+FVector ASpeedyVehicle::GetAirResistance()
+{
+	return -Velocity.GetSafeNormal() * Velocity.SizeSquared() *  DragCoefficient;
+}
+
 // Called every frame
 void ASpeedyVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	UpdateLocation(DeltaTime);
-	
+	UpdateLocation(DeltaTime);	
 	UpdateRotation(DeltaTime);
+
+	UE_LOG(LogTemp, Warning, TEXT("Gravity is: %f"), GetWorld()->GetGravityZ())
 }
 
 // Called to bind functionality to input
