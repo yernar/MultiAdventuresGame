@@ -27,6 +27,7 @@ private:
 	void UpdateRotation(float DeltaTime);
 
 	FVector GetAirResistance();
+	FVector GetRollingResistance();
 
 public:	
 	// Called every frame
@@ -51,6 +52,10 @@ private:
 	/* The higher drag coefficient is the higher air resistance will be */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 		float DragCoefficient = 25.f;
+
+	/* The higher drag coefficient is the higher rolling resistance will be */
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+		float RollingResistanceCoefficient = 0.015f;
 
 	FVector Velocity;
 	float Speed = 20.f;
