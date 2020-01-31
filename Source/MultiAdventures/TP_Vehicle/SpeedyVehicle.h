@@ -20,8 +20,11 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	UFUNCTION(Server, Reliable, WithValidation)
+		void MoveForward(float Value);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+		void MoveRight(float Value);
 
 	void UpdateLocation(float DeltaTime);
 	void UpdateRotation(float DeltaTime);
@@ -56,7 +59,7 @@ private:
 
 	/* The higher drag coefficient is the higher rolling resistance will be */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
-		float RollingResistanceCoefficient = 0.015f;
+		float RollingResistanceCoefficient = .015f;
 
 	/* Minimum car turning radius (m) */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)

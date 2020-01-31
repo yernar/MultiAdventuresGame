@@ -13,7 +13,7 @@ void AMultiPlayerState::ReadyStatus_Implementation(EPlayerReadinessStatus Player
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &AMultiPlayerState::NotEnoughPlayersHandle, 1.5f, false);
 	}
 
-	else 
+	else
 	{
 		PlayerReadinessStatus = PlayerStatus;
 		Cast<ALobbyGameMode>(GetWorld()->GetAuthGameMode())->CheckPlayersReadiness();

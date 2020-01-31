@@ -18,12 +18,22 @@ void ASpeedyVehicle::BeginPlay()
 	
 }
 
-void ASpeedyVehicle::MoveForward(float Value)
+bool ASpeedyVehicle::MoveForward_Validate(float Value)
+{
+	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
+}
+
+void ASpeedyVehicle::MoveForward_Implementation(float Value)
 {
 	Throttle = Value;
 }
 
-void ASpeedyVehicle::MoveRight(float Value)
+bool ASpeedyVehicle::MoveRight_Validate(float Value)
+{
+	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
+}
+
+void ASpeedyVehicle::MoveRight_Implementation(float Value)
 {
 	SteeringThrow = Value;
 }
