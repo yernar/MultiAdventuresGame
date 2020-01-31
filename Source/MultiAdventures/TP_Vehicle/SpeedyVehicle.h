@@ -46,8 +46,9 @@ private:
 		float MaxDrivingForce = 10000.f; 
 
 	/* Degrees Per Second -- (degrees / sec) */
+	/* Removed bc of it got replaced by TurningCircleRadius prop.
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
-		float MaxDPS = 90.f;
+		float MaxDPS = 90.f;*/
 
 	/* The higher drag coefficient is the higher air resistance will be */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
@@ -56,6 +57,10 @@ private:
 	/* The higher drag coefficient is the higher rolling resistance will be */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 		float RollingResistanceCoefficient = 0.015f;
+
+	/* Minimum car turning radius (m) */
+	UPROPERTY(EditDefaultsOnly, Category = Movement)
+		float MinTurningRadius = 10.f;
 
 	FVector Velocity;
 	float Speed = 20.f;

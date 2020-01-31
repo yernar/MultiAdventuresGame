@@ -45,8 +45,9 @@ void ASpeedyVehicle::UpdateLocation(float DeltaTime)
 
 void ASpeedyVehicle::UpdateRotation(float DeltaTime)
 {
-	float RotationAngleDegrees = MaxDPS * DeltaTime * SteeringThrow;
-	FQuat RotationDelta(GetActorUpVector(), FMath::DegreesToRadians(RotationAngleDegrees));
+	float DeltaLocation = FVector::DotProduct(GetActorForwardVector(), Velocity) * DeltaTime;
+	float RotationAngleRadians =  DeltaLocation / MinTurningRadius * SteeringThrow;
+	FQuat RotationDelta(GetActorUpVector(), RotationAngleRadians);
 
 	Velocity = RotationDelta.RotateVector(Velocity);
 	AddActorWorldRotation(RotationDelta);
