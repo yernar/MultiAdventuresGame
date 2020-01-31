@@ -3,6 +3,8 @@
 
 #include "SpeedyVehicle.h"
 
+#include "DrawDebugHelpers.h"
+
 // Sets default values
 ASpeedyVehicle::ASpeedyVehicle()
 {
@@ -18,22 +20,34 @@ void ASpeedyVehicle::BeginPlay()
 	
 }
 
-bool ASpeedyVehicle::MoveForward_Validate(float Value)
+void ASpeedyVehicle::MoveForward(float Value)
+{
+	Throttle = Value;
+	Server_MoveForward(Value);
+}
+
+void ASpeedyVehicle::MoveRight(float Value)
+{
+	SteeringThrow = Value;
+	Server_MoveRight(Value);
+}
+
+bool ASpeedyVehicle::Server_MoveForward_Validate(float Value)
 {
 	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
 }
 
-void ASpeedyVehicle::MoveForward_Implementation(float Value)
+void ASpeedyVehicle::Server_MoveForward_Implementation(float Value)
 {
 	Throttle = Value;
 }
 
-bool ASpeedyVehicle::MoveRight_Validate(float Value)
+bool ASpeedyVehicle::Server_MoveRight_Validate(float Value)
 {
 	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
 }
 
-void ASpeedyVehicle::MoveRight_Implementation(float Value)
+void ASpeedyVehicle::Server_MoveRight_Implementation(float Value)
 {
 	SteeringThrow = Value;
 }
@@ -81,7 +95,8 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	UpdateLocation(DeltaTime);	
-	UpdateRotation(DeltaTime);	
+	UpdateRotation(DeltaTime);
+	DrawDebugString(GetWorld(), FVector(.0f, .0f, 100.f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::White, DeltaTime);
 }
 
 // Called to bind functionality to input

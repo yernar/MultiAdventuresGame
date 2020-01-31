@@ -20,11 +20,14 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION(Server, Reliable, WithValidation)
-		void MoveForward(float Value);
+	void MoveForward(float Value);
+	void MoveRight(float Value);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void MoveRight(float Value);
+		void Server_MoveForward(float Value);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_MoveRight(float Value);
 
 	void UpdateLocation(float DeltaTime);
 	void UpdateRotation(float DeltaTime);
