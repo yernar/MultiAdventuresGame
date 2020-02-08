@@ -29,6 +29,9 @@ private:
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_MoveRight(float Value);
 
+	UFUNCTION()
+		void OnReplicated_CarTransform();
+
 	void UpdateLocation(float DeltaTime);
 	void UpdateRotation(float DeltaTime);
 
@@ -76,11 +79,8 @@ private:
 	float SteeringThrow;
 	/* ********************************** */
 
-	UPROPERTY(Replicated)
-		FVector Replicated_Location;
-
-	UPROPERTY(Replicated)
-		FRotator Replicated_Rotation;
+	UPROPERTY(ReplicatedUsing = OnReplicated_CarTransform)
+		FTransform CarTransform;
 
 	FHitResult* HitResult;
 };

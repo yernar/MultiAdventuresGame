@@ -19,12 +19,15 @@ void ASpeedyVehicle::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (HasAuthority())
+		NetUpdateFrequency = 1.f;
 }
 
 void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	DOREPLIFETIME(ASpeedyVehicle, Replicated_Location)
-	DOREPLIFETIME(ASpeedyVehicle, Replicated_Rotation)
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASpeedyVehicle, CarTransform)
 }
 
 void ASpeedyVehicle::MoveForward(float Value)
@@ -57,6 +60,11 @@ bool ASpeedyVehicle::Server_MoveRight_Validate(float Value)
 void ASpeedyVehicle::Server_MoveRight_Implementation(float Value)
 {
 	SteeringThrow = Value;
+}
+
+void ASpeedyVehicle::OnReplicated_CarTransform()
+{
+	SetActorTransform(CarTransform);
 }
 
 void ASpeedyVehicle::UpdateLocation(float DeltaTime)
@@ -109,15 +117,7 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 
 	/* Replication */
 	if (HasAuthority())
-	{
-		Replicated_Location = GetActorLocation();
-		Replicated_Rotation = GetActorRotation();
-	}
-	else
-	{
-		SetActorLocation(Replicated_Location);
-		SetActorRotation(Replicated_Rotation);
-	}
+		CarTransform = GetActorTransform();
 }
 
 // Called to bind functionality to input
