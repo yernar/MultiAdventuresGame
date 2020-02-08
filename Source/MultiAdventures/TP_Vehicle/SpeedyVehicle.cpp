@@ -3,14 +3,15 @@
 
 #include "SpeedyVehicle.h"
 
-#include "DrawDebugHelpers.h"
+#include "DrawDebugHelpers.h" // only for debugging purposes
+#include "UnrealNetwork.h"
 
 // Sets default values
 ASpeedyVehicle::ASpeedyVehicle()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -18,6 +19,12 @@ void ASpeedyVehicle::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	DOREPLIFETIME(ASpeedyVehicle, Replicated_Location)
+	DOREPLIFETIME(ASpeedyVehicle, Replicated_Rotation)
 }
 
 void ASpeedyVehicle::MoveForward(float Value)
@@ -96,7 +103,21 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	
 	UpdateLocation(DeltaTime);	
 	UpdateRotation(DeltaTime);
+
+	// debugging
 	DrawDebugString(GetWorld(), FVector(.0f, .0f, 100.f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::White, DeltaTime);
+
+	/* Replication */
+	if (HasAuthority())
+	{
+		Replicated_Location = GetActorLocation();
+		Replicated_Rotation = GetActorRotation();
+	}
+	else
+	{
+		SetActorLocation(Replicated_Location);
+		SetActorRotation(Replicated_Rotation);
+	}
 }
 
 // Called to bind functionality to input

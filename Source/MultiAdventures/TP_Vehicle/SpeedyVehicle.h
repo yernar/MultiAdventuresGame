@@ -76,5 +76,11 @@ private:
 	float SteeringThrow;
 	/* ********************************** */
 
+	UPROPERTY(Replicated)
+		FVector Replicated_Location;
+
+	UPROPERTY(Replicated)
+		FRotator Replicated_Rotation;
+
 	FHitResult* HitResult;
 };
