@@ -3,7 +3,7 @@
 
 #include "SpeedyVehicle.h"
 
-#include "DrawDebugHelpers.h" // only for debugging purposes
+#include "DrawDebugHelpers.h" // for debugging purposes
 #include "UnrealNetwork.h"
 
 // Sets default values
@@ -28,6 +28,9 @@ void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ASpeedyVehicle, CarTransform)
+	DOREPLIFETIME(ASpeedyVehicle, Velocity)
+	DOREPLIFETIME(ASpeedyVehicle, Throttle)
+	DOREPLIFETIME(ASpeedyVehicle, SteeringThrow)
 }
 
 void ASpeedyVehicle::MoveForward(float Value)

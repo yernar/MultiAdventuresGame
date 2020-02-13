@@ -71,12 +71,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 		float MinTurningRadius = 10.f;
 
-	FVector Velocity;
+	UPROPERTY(Replicated)
+		FVector Velocity;
+	
 	float Speed = 20.f;
 
-	/* will be initialized in Move Events */
-	float Throttle;
-	float SteeringThrow;
+	/* will be initialized & changed in Move Events */
+	UPROPERTY(Replicated)
+		float Throttle;
+	UPROPERTY(Replicated)
+		float SteeringThrow;
 	/* ********************************** */
 
 	UPROPERTY(ReplicatedUsing = OnReplicated_CarTransform)
