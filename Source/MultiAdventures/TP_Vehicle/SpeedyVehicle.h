@@ -6,6 +6,36 @@
 #include "GameFramework/Pawn.h"
 #include "SpeedyVehicle.generated.h"
 
+USTRUCT()
+struct FVehicleMove
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY()
+		float Throttle;
+	UPROPERTY()
+		float SteeringThrow;
+	UPROPERTY()
+		float DeltaTime;
+	UPROPERTY()
+		float Time;
+};
+
+USTRUCT()
+struct FVehicleState
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY()
+		FTransform CarTransform;
+	UPROPERTY()
+		FVector Velocity;
+	UPROPERTY()
+		FVehicleMove LastMove;
+
+};
+
+
 UCLASS()
 class MULTIADVENTURES_API ASpeedyVehicle : public APawn
 {
