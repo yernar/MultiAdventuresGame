@@ -64,6 +64,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	void SimulateMove(FVehicleMove Move);
+
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
@@ -73,8 +75,8 @@ private:
 	UFUNCTION()
 		void OnReplicated_ServerState();
 
-	void UpdateLocation(float DeltaTime);
-	void UpdateRotation(float DeltaTime);
+	void UpdateLocation(FVehicleMove Move);
+	void UpdateRotation(FVehicleMove Move);
 
 	FVector GetAirResistance();
 	FVector GetRollingResistance();
@@ -119,9 +121,7 @@ private:
 	FVehicleState ServerState;
 
 	/* will be initialized & changed in Move Events */
-	UPROPERTY(Replicated)
 		float Throttle;
-	UPROPERTY(Replicated)
 		float SteeringThrow;
 	/* ********************************** */
 

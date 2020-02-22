@@ -3,7 +3,6 @@
 
 #include "SpeedyVehicle.h"
 
-#include "DrawDebugHelpers.h" // for debugging purposes
 #include "UnrealNetwork.h"
 
 // Sets default values
@@ -28,8 +27,12 @@ void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ASpeedyVehicle, ServerState)
-	DOREPLIFETIME(ASpeedyVehicle, Throttle)
-	DOREPLIFETIME(ASpeedyVehicle, SteeringThrow)
+}
+
+void ASpeedyVehicle::SimulateMove(FVehicleMove Move)
+{
+	UpdateLocation(Move);
+	UpdateRotation(Move);
 }
 
 void ASpeedyVehicle::MoveForward(float Value)
@@ -49,8 +52,11 @@ bool ASpeedyVehicle::Server_SendMove_Validate(FVehicleMove Move)
 
 void ASpeedyVehicle::Server_SendMove_Implementation(FVehicleMove Move)
 {
-	Throttle = Move.Throttle;
-	SteeringThrow = Move.SteeringThrow;
+	SimulateMove(Move);
+
+	ServerState.CarTransform = GetActorTransform();
+	ServerState.Velocity = Velocity;
+	ServerState.LastMove = Move;
 }
 
 //bool ASpeedyVehicle::Server_MoveRight_Validate(float Value)
@@ -69,14 +75,14 @@ void ASpeedyVehicle::OnReplicated_ServerState()
 	Velocity = ServerState.Velocity;
 }
 
-void ASpeedyVehicle::UpdateLocation(float DeltaTime)
+void ASpeedyVehicle::UpdateLocation(FVehicleMove Move)
 {
-	FVector Force = GetActorForwardVector() * MaxDrivingForce * Throttle + GetAirResistance() + GetRollingResistance();
+	FVector Force = GetActorForwardVector() * MaxDrivingForce * Move.Throttle + GetAirResistance() + GetRollingResistance();
 	FVector Acceleration = Force / Mass;
-	Velocity += Acceleration * DeltaTime;
+	Velocity += Acceleration * Move.DeltaTime;
 
 	HitResult = new FHitResult();
-	AddActorWorldOffset(Velocity * 100 * DeltaTime, true, HitResult); // converting velocity to cm., as initially it was m.
+	AddActorWorldOffset(Velocity * 100 * Move.DeltaTime, true, HitResult); // converting velocity to cm., as initially it was m.
 	
 	if (HitResult->IsValidBlockingHit())
 		Velocity = FVector::ZeroVector;
@@ -84,10 +90,10 @@ void ASpeedyVehicle::UpdateLocation(float DeltaTime)
 	delete HitResult;
 }
 
-void ASpeedyVehicle::UpdateRotation(float DeltaTime)
+void ASpeedyVehicle::UpdateRotation(FVehicleMove Move)
 {
-	float DeltaLocation = FVector::DotProduct(GetActorForwardVector(), Velocity) * DeltaTime;
-	float RotationAngleRadians =  DeltaLocation / MinTurningRadius * SteeringThrow;
+	float DeltaLocation = FVector::DotProduct(GetActorForwardVector(), Velocity) * Move.DeltaTime;
+	float RotationAngleRadians =  DeltaLocation / MinTurningRadius * Move.SteeringThrow;
 	FQuat RotationDelta(GetActorUpVector(), RotationAngleRadians);
 
 	Velocity = RotationDelta.RotateVector(Velocity);
@@ -115,21 +121,8 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	{
 		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, 1.f); // TODO: set normal time
 		Server_SendMove(Move);
-	}
-
-	UpdateLocation(DeltaTime);	
-	UpdateRotation(DeltaTime);
-
-	// debugging
-	DrawDebugString(GetWorld(), FVector(.0f, .0f, 100.f), UEnum::GetValueAsString(GetLocalRole()), this, FColor::White, DeltaTime);
-
-	/* Replication */
-	if (HasAuthority())
-	{
-		ServerState.CarTransform = GetActorTransform();
-		ServerState.Velocity = Velocity;
-		// TODO: Update Last Move prop.
-	}
+		SimulateMove(Move);
+	}	
 }
 
 // Called to bind functionality to input
