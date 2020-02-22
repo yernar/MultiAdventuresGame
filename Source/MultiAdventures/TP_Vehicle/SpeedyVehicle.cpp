@@ -27,8 +27,7 @@ void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ASpeedyVehicle, CarTransform)
-	DOREPLIFETIME(ASpeedyVehicle, Velocity)
+	DOREPLIFETIME(ASpeedyVehicle, ServerState)
 	DOREPLIFETIME(ASpeedyVehicle, Throttle)
 	DOREPLIFETIME(ASpeedyVehicle, SteeringThrow)
 }
@@ -36,38 +35,38 @@ void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 void ASpeedyVehicle::MoveForward(float Value)
 {
 	Throttle = Value;
-	Server_MoveForward(Value);
 }
 
 void ASpeedyVehicle::MoveRight(float Value)
 {
 	SteeringThrow = Value;
-	Server_MoveRight(Value);
 }
 
-bool ASpeedyVehicle::Server_MoveForward_Validate(float Value)
+bool ASpeedyVehicle::Server_SendMove_Validate(FVehicleMove Move)
 {
-	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
+	return true; // TODO: check if clients not cheating!
 }
 
-void ASpeedyVehicle::Server_MoveForward_Implementation(float Value)
+void ASpeedyVehicle::Server_SendMove_Implementation(FVehicleMove Move)
 {
-	Throttle = Value;
+	Throttle = Move.Throttle;
+	SteeringThrow = Move.SteeringThrow;
 }
 
-bool ASpeedyVehicle::Server_MoveRight_Validate(float Value)
-{
-	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
-}
+//bool ASpeedyVehicle::Server_MoveRight_Validate(float Value)
+//{
+//	return (Value <= 1.f ? true : (Value >= 1.f ? true : false));
+//}
+//
+//void ASpeedyVehicle::Server_MoveRight_Implementation(float Value)
+//{
+//	SteeringThrow = Value;
+//}
 
-void ASpeedyVehicle::Server_MoveRight_Implementation(float Value)
+void ASpeedyVehicle::OnReplicated_ServerState()
 {
-	SteeringThrow = Value;
-}
-
-void ASpeedyVehicle::OnReplicated_CarTransform()
-{
-	SetActorTransform(CarTransform);
+	SetActorTransform(ServerState.CarTransform);
+	Velocity = ServerState.Velocity;
 }
 
 void ASpeedyVehicle::UpdateLocation(float DeltaTime)
@@ -112,6 +111,12 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	if (IsLocallyControlled())
+	{
+		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, 1.f); // TODO: set normal time
+		Server_SendMove(Move);
+	}
+
 	UpdateLocation(DeltaTime);	
 	UpdateRotation(DeltaTime);
 
@@ -120,7 +125,11 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 
 	/* Replication */
 	if (HasAuthority())
-		CarTransform = GetActorTransform();
+	{
+		ServerState.CarTransform = GetActorTransform();
+		ServerState.Velocity = Velocity;
+		// TODO: Update Last Move prop.
+	}
 }
 
 // Called to bind functionality to input

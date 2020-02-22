@@ -11,6 +11,20 @@ struct FVehicleMove
 {
 	GENERATED_USTRUCT_BODY()
 
+	FVehicleMove()
+	{
+
+	}
+
+	FVehicleMove(float InThrottle, float InSteeringThrow, float DeltaT, float InTime) : 
+		Throttle(InThrottle), 
+		SteeringThrow(InSteeringThrow), 
+		DeltaTime(DeltaT), 
+		Time(InTime)
+	{
+		
+	}
+
 	UPROPERTY()
 		float Throttle;
 	UPROPERTY()
@@ -54,13 +68,10 @@ private:
 	void MoveRight(float Value);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveForward(float Value);
-
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_MoveRight(float Value);
+		void Server_SendMove(FVehicleMove Move); // rename
 
 	UFUNCTION()
-		void OnReplicated_CarTransform();
+		void OnReplicated_ServerState();
 
 	void UpdateLocation(float DeltaTime);
 	void UpdateRotation(float DeltaTime);
@@ -100,11 +111,12 @@ private:
 	/* Minimum car turning radius (m) */
 	UPROPERTY(EditDefaultsOnly, Category = Movement)
 		float MinTurningRadius = 10.f;
-
-	UPROPERTY(Replicated)
-		FVector Velocity;
 	
 	float Speed = 20.f;
+	FVector Velocity;
+
+	UPROPERTY(ReplicatedUsing = OnReplicated_ServerState)
+	FVehicleState ServerState;
 
 	/* will be initialized & changed in Move Events */
 	UPROPERTY(Replicated)
@@ -112,9 +124,6 @@ private:
 	UPROPERTY(Replicated)
 		float SteeringThrow;
 	/* ********************************** */
-
-	UPROPERTY(ReplicatedUsing = OnReplicated_CarTransform)
-		FTransform CarTransform;
 
 	FHitResult* HitResult;
 };
