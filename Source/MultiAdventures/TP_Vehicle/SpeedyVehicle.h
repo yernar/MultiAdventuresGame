@@ -75,6 +75,8 @@ private:
 	UFUNCTION()
 		void OnReplicated_ServerState();
 
+	void ClearAcknowledgedMoves(FVehicleMove& LastMove);
+
 	void UpdateLocation(FVehicleMove Move);
 	void UpdateRotation(FVehicleMove Move);
 
@@ -83,7 +85,7 @@ private:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float DeltaTime) override;	
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -126,4 +128,6 @@ private:
 	/* ********************************** */
 
 	FHitResult* HitResult;
+
+	TArray<FVehicleMove> UnaknowledgedMoves;
 };

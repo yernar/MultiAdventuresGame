@@ -73,6 +73,19 @@ void ASpeedyVehicle::OnReplicated_ServerState()
 {
 	SetActorTransform(ServerState.CarTransform);
 	Velocity = ServerState.Velocity;
+
+	ClearAcknowledgedMoves(ServerState.LastMove);
+}
+
+void ASpeedyVehicle::ClearAcknowledgedMoves(FVehicleMove& LastMove)
+{
+	TArray<FVehicleMove> NewMoves;
+
+	for (const FVehicleMove& Move : UnaknowledgedMoves)
+		if (Move.Time > LastMove.Time)
+			NewMoves.Add(Move);
+
+	UnaknowledgedMoves = NewMoves;
 }
 
 void ASpeedyVehicle::UpdateLocation(FVehicleMove Move)
@@ -119,9 +132,20 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	
 	if (IsLocallyControlled())
 	{
-		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, 1.f); // TODO: set normal time
+		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
 		Server_SendMove(Move);
 		SimulateMove(Move);
+
+		if (!HasAuthority())
+		{
+			UnaknowledgedMoves.Add(Move);
+			UE_LOG(LogTemp, Warning, TEXT("QUEUE LENGTH: %d"), UnaknowledgedMoves.Num())
+		}
+
+		FVehicleMove LastMove;
+
+		ClearAcknowledgedMoves(LastMove);
+
 	}	
 }
 
