@@ -64,7 +64,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	void SimulateMove(FVehicleMove Move);
+	void SimulateMove(const FVehicleMove& Move);
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);

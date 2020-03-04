@@ -29,7 +29,7 @@ void ASpeedyVehicle::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ASpeedyVehicle, ServerState)
 }
 
-void ASpeedyVehicle::SimulateMove(FVehicleMove Move)
+void ASpeedyVehicle::SimulateMove(const FVehicleMove& Move)
 {
 	UpdateLocation(Move);
 	UpdateRotation(Move);
@@ -47,7 +47,7 @@ void ASpeedyVehicle::MoveRight(float Value)
 
 bool ASpeedyVehicle::Server_SendMove_Validate(FVehicleMove Move)
 {
-	return true; // TODO: check if clients not cheating!
+	return true; // TODO: check if clients are not cheating!
 }
 
 void ASpeedyVehicle::Server_SendMove_Implementation(FVehicleMove Move)
@@ -75,6 +75,11 @@ void ASpeedyVehicle::OnReplicated_ServerState()
 	Velocity = ServerState.Velocity;
 
 	ClearAcknowledgedMoves(ServerState.LastMove);
+
+	for (const FVehicleMove& Move : UnaknowledgedMoves)
+	{
+		SimulateMove(Move);
+	}
 }
 
 void ASpeedyVehicle::ClearAcknowledgedMoves(FVehicleMove& LastMove)
@@ -133,13 +138,12 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	if (IsLocallyControlled())
 	{
 		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
-		Server_SendMove(Move);
-		SimulateMove(Move);
+		Server_SendMove(Move);		
 
 		if (!HasAuthority())
 		{
 			UnaknowledgedMoves.Add(Move);
-			UE_LOG(LogTemp, Warning, TEXT("QUEUE LENGTH: %d"), UnaknowledgedMoves.Num())
+			SimulateMove(Move);
 		}
 
 		FVehicleMove LastMove;
@@ -147,6 +151,27 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 		ClearAcknowledgedMoves(LastMove);
 
 	}	
+
+	if (Role == ROLE_AutonomousProxy)
+	{
+		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
+		SimulateMove(Move);
+
+		UnaknowledgedMoves.Add(Move);
+		Server_SendMove(Move);
+	}
+
+	// if we are the server and controlling the pawn
+	if (Role == ROLE_Authority && GetRemoteRole() == ENetRole::ROLE_SimulatedProxy)
+	{
+		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
+		Server_SendMove(Move);
+	}
+
+	if (ENetRole::ROLE_SimulatedProxy == Role)
+	{
+		SimulateMove(ServerState.LastMove);
+	}
 }
 
 // Called to bind functionality to input
