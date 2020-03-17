@@ -2,14 +2,12 @@
 
 #include "TP_VehicleGameMode.h"
 #include "TP_VehicleHud.h"
+#include "TP_VehiclePawn.h"
 
 #include "UObject/ConstructorHelpers.h"
 
 ATP_VehicleGameMode::ATP_VehicleGameMode()
-{
-	static ConstructorHelpers::FClassFinder<APawn> VehiclePawnClass(TEXT("/Game/Pawns/Vehicle/Blueprints/BP_SpeedyVehicle"));
-	if (VehiclePawnClass.Class)
-		DefaultPawnClass = VehiclePawnClass.Class;
-
+{	
+	DefaultPawnClass = ATP_VehiclePawn::StaticClass();
 	HUDClass = ATP_VehicleHud::StaticClass();
 }

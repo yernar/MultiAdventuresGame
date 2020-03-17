@@ -102,6 +102,7 @@ void UMultiGameInstance::HostGame(const FString& HostName)
 		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
+		// SessionSettings.
 		SessionSettings.Set(SESSION_HOST_NAME_KEY, HostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);					
@@ -173,6 +174,7 @@ void UMultiGameInstance::OnFindSessionsComplete(bool bSuccess)
 			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
 			ServerProperty.CurrentPlayers = ServerProperty.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;			
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
+			// ServerProperty.GameMode = 
 			ServerProperties.Add(ServerProperty);
 		}
 		MainMenuWidget->AddServersToServerList(ServerProperties);	

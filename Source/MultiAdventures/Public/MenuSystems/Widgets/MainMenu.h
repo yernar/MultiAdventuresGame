@@ -20,6 +20,13 @@ enum class EMenuTypes : uint32
 	HOST_MENU
 };
 
+UENUM()
+enum EGameMode
+{
+	PJ, // Platform Jumper Game Mode
+	SV  // Speedy Vehicle Game Mode
+};
+
 UCLASS()
 class MULTIADVENTURES_API UMainMenu : public UUserWidget
 {
@@ -74,8 +81,12 @@ private:
 		UButton* BackFromHostButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
 		UButton* HostGameButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
+		UButton* SelectedGameModeButton;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = List)
-		class UEditableTextBox* HostNameTextBox;
+		class UEditableTextBox* HostNameTextBox;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Text)
+		class UTextBlock* SelectedGameModeText;
 	// ******************************************************* ************************* ****************************************************************** //
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = Buttons)
@@ -89,11 +100,14 @@ private:
 
 	UServerRow* ServerRowWidget;
 
+	static TEnumAsByte<EGameMode> SelectedGameMode;
+
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
 	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
 	FORCEINLINE uint32 GetSelectedIndex() { return (SelectedIndex.IsSet() ? SelectedIndex.GetValue() : UnselectedIndex); }
 	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
+	FORCEINLINE static EGameMode GetSelectedGameMode() { return SelectedGameMode; }
 
 private:
 	UFUNCTION()
@@ -119,7 +133,9 @@ private:
 	UFUNCTION()
 		void OnHostGameClicked();
 	UFUNCTION()
-		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);	
+		void OnSelectedGameModeClicked();
+	UFUNCTION()
+		void OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);		
 
 	// Step Back From Other Panels to Main Menu Panel
 	UFUNCTION()
