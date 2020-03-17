@@ -25,6 +25,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TravelGameMap();
 
+	void SetGameMap();
+
 private:
 	int NumPlayers = 0;		
+
+	FString* GameMapLocation;
+
+	const FString DefaultMapsDirectory = "/Game/Maps/";
 };

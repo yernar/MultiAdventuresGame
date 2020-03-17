@@ -18,6 +18,7 @@ struct FServerProperty
 	FString HostedUsername;
 	uint32 CurrentPlayers;
 	uint32 MaxPlayers;	
+	enum EGameMode GameMode;
 };
 
 UCLASS()
@@ -48,6 +49,8 @@ private:
 		UTextBlock* HostingUser;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		UTextBlock* NumPlayers;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
+		UTextBlock* ModeName;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true, BindWidget), Category = ServerRowProps)
 		class UButton* RowButton;
 

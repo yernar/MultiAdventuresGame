@@ -16,5 +16,5 @@ void AMenuPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	check(InputComponent);
-	InputComponent->BindAction("BackOneStep", IE_Pressed, this, &AMenuPlayerController::BackOneStep);
+	InputComponent->BindAction("BackOneStep", IE_Pressed, this, &AMenuPlayerController::BackOneStep); // insted of this try to replace it with AMainMenu
 }

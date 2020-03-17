@@ -4,20 +4,25 @@
 #include "LobbyGameMode.h"
 #include "MultiPlayerState.h"
 #include "LobbyHUD.h"
+#include "MainMenu.h"
 
 #include "GameFramework\GameStateBase.h"
 
 ALobbyGameMode::ALobbyGameMode()
 {
 	bUseSeamlessTravel = true;
+	PrimaryActorTick.bCanEverTick = true;
 
 	PlayerStateClass = AMultiPlayerState::StaticClass();
 	HUDClass = ALobbyHUD::StaticClass();
+	GameMapLocation = new FString(DefaultMapsDirectory);
+
+	SetGameMap();
 }
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
-	Super::PostLogin(NewPlayer);	
+	Super::PostLogin(NewPlayer);
 }
 
 void ALobbyGameMode::Logout(AController* Exiting)
@@ -38,5 +43,22 @@ void ALobbyGameMode::CheckPlayersReadiness()
 
 void ALobbyGameMode::TravelGameMap()
 {
-	GetWorld()->ServerTravel("/Game/Maps/MainLevel?listen");
+	GetWorld()->ServerTravel(*GameMapLocation);
+}
+
+void ALobbyGameMode::SetGameMap()
+{
+	FString MapName;
+
+	switch (UMainMenu::GetSelectedGameMode())
+	{
+	case PJ:
+		MapName = "PlatformJumper";
+		break;
+	case SV:
+		MapName = "SpeedyVehicle";		
+		break;
+	}
+
+	*GameMapLocation += MapName;
 }

@@ -9,8 +9,11 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "Components/TextBlock.h"
 
-const uint32 UMainMenu::UnselectedIndex = 667; // TODO: WTF??
+const uint32 UMainMenu::UnselectedIndex = 667;
+
+TEnumAsByte<EGameMode> UMainMenu::SelectedGameMode;
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -41,19 +44,19 @@ void UMainMenu::TeardownMainMenu()
 	GetWorld()->GetFirstPlayerController()->bShowMouseCursor = false;
 }
 
-void UMainMenu::AddServersToServerList(const TArray<FServerProperty>& ServerNames)
+void UMainMenu::AddServersToServerList(const TArray<FServerProperty>& ServerProps)
 {
 	if (GetMenuInterface())
 	{
-		for (int32 i = 0; i < ServerNames.Num(); ++i)
+		for (int32 i = 0; i < ServerProps.Num(); ++i)
 		{
 			ServerRowWidget = (ServerRowClass ? CreateWidget<UServerRow>(GetWorld(), ServerRowClass) : nullptr);
 
 			if (ServerRowWidget)
 			{
-				ServerRowWidget->SetServerText(ServerNames[i].Name);
-				ServerRowWidget->SetHostingUserText(ServerNames[i].HostedUsername);
-				ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerNames[i].CurrentPlayers, ServerNames[i].MaxPlayers));
+				ServerRowWidget->SetServerText(ServerProps[i].Name);
+				ServerRowWidget->SetHostingUserText(ServerProps[i].HostedUsername);
+				ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerProps[i].CurrentPlayers, ServerProps[i].MaxPlayers));
 				ServerRowWidget->Setup(this, i);
 				ServerList->AddChild(ServerRowWidget);
 			}
@@ -129,6 +132,7 @@ bool UMainMenu::Initialize()
 	HostNameTextBox->OnTextCommitted.AddDynamic(this, &UMainMenu::OnHostNameTextCommitted);
 	BackFromHostButton->OnClicked.AddDynamic(this, &UMainMenu::BackToMainMenu);
 	HostGameButton->OnClicked.AddDynamic(this, &UMainMenu::OnHostGameClicked);
+	SelectedGameModeButton->OnClicked.AddDynamic(this, &UMainMenu::OnSelectedGameModeClicked);
 
 	/* Solo is Not Available R8 now */
 	SoloButton->SetIsEnabled(false);
@@ -184,6 +188,24 @@ void UMainMenu::OnHostGameClicked()
 		HostNameTextBox->GetText().IsEmpty() ?
 			GetMenuInterface()->HostGame() :
 			GetMenuInterface()->HostGame(HostNameTextBox->GetText().ToString());
+}
+
+void UMainMenu::OnSelectedGameModeClicked()
+{	
+	// Check if the next element is None. If it is assign enum variable to the first element of enum. 
+	SelectedGameMode = UEnum::GetValueAsString(EGameMode(GetSelectedGameMode() + 1)) == "EGameMode_MAX" ? EGameMode(0) : EGameMode(GetSelectedGameMode() + 1); // UE automatically creates MAX element to indicate the ending of a list
+	SelectedGameModeText->SetText(FText::FromString(UEnum::GetValueAsString(GetSelectedGameMode())));
+	FString ModeFullName;
+	switch (GetSelectedGameMode())
+	{		
+	case PJ:
+		ModeFullName = "Platform Jumper";		
+		break;
+	case SV:
+		ModeFullName = "Speedy Vehicle";
+		break;	
+	}
+	SelectedGameModeButton->SetToolTipText(FText::FromString(ModeFullName));
 }
 
 void UMainMenu::OnHostNameTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
