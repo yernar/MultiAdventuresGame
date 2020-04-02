@@ -5,6 +5,7 @@
 #include "MultiPlayerState.h"
 #include "LobbyHUD.h"
 #include "MainMenu.h"
+#include "MultiGameInstance.h"
 
 #include "GameFramework\GameStateBase.h"
 
@@ -15,7 +16,12 @@ ALobbyGameMode::ALobbyGameMode()
 
 	PlayerStateClass = AMultiPlayerState::StaticClass();
 	HUDClass = ALobbyHUD::StaticClass();
-	GameMapLocation = new FString(DefaultMapsDirectory);
+	GameMapLocation = new FString(DefaultMapsDirectory);	
+}
+
+void ALobbyGameMode::BeginPlay()
+{
+	Super::BeginPlay();
 
 	SetGameMap();
 }
@@ -50,7 +56,7 @@ void ALobbyGameMode::SetGameMap()
 {
 	FString MapName;
 
-	switch (UMainMenu::GetSelectedGameMode())
+	switch (Cast<UMultiGameInstance>(GetGameInstance())->GetMainMenuWidget()->GetSelectedGameMode())
 	{
 	case PJ:
 		MapName = "PlatformJumper";

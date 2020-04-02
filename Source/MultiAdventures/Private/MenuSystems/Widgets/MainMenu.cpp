@@ -13,8 +13,6 @@
 
 const uint32 UMainMenu::UnselectedIndex = 667;
 
-TEnumAsByte<EGameMode> UMainMenu::SelectedGameMode;
-
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	ConstructorHelpers::FClassFinder<UUserWidget> WBP_ServerRowClass(TEXT("/Game/MenuSystem/Widgets/WBP_ServerRow"));
@@ -57,10 +55,10 @@ void UMainMenu::AddServersToServerList(const TArray<FServerProperty>& ServerProp
 				ServerRowWidget->SetServerText(ServerProps[i].Name);
 				ServerRowWidget->SetHostingUserText(ServerProps[i].HostedUsername);
 				ServerRowWidget->SetNumPlayersText(FString::Printf(TEXT("%d/%d"), ServerProps[i].CurrentPlayers, ServerProps[i].MaxPlayers));
+				ServerRowWidget->SetModeNameText(UEnum::GetValueAsString(ServerProps[i].GameMode.GetValue()));
 				ServerRowWidget->Setup(this, i);
 				ServerList->AddChild(ServerRowWidget);
 			}
-			// TODO: After joining a game, delete all these widgets
 		}		
 	}
 }
@@ -152,6 +150,7 @@ void UMainMenu::OnJoinMenuSwitcherClicked()
 
 	/* Wait Until Session Finishes Searching for Available Servers */
 	ToggleRefreshingServersSectionButtons(false);
+	DeselectIndex();
 }
 
 void UMainMenu::OnSoloButtonClicked()
@@ -172,6 +171,7 @@ void UMainMenu::OnRefreshServersListClicked()
 	if (MenuInterface)
 	{		
 		ToggleRefreshingServersSectionButtons(false);
+		DeselectIndex();
 		MenuInterface->RefreshServers();
 	}
 }

@@ -18,7 +18,7 @@ struct FServerProperty
 	FString HostedUsername;
 	uint32 CurrentPlayers;
 	uint32 MaxPlayers;	
-	enum EGameMode GameMode;
+	TEnumAsByte<enum EGameMode> GameMode;
 };
 
 UCLASS()
@@ -36,8 +36,11 @@ public:
 	void SetHostingUserText(const FString& Text = "Unknown");
 	const FString& GetHostingUserText() const;
 
-	void SetNumPlayersText(const FString& Text = "Unknown");
+	void SetNumPlayersText(const FString& Text = "U");
 	const FString& GetNumPlayersText() const;
+
+	void SetModeNameText(const FString& Text = "UNK");
+	const FString& GetModeNameText() const;
 
 	void OnSelected();
 	void OnUnselected();
@@ -66,6 +69,7 @@ public:
 	FORCEINLINE class UTextBlock* GetServerName() const { return ServerName; }
 	FORCEINLINE UTextBlock* GetHostingUser() const { return HostingUser; }
 	FORCEINLINE UTextBlock* GetNumPlayers() const { return NumPlayers; }
+	FORCEINLINE UTextBlock* GetModeName() const { return ModeName; }
 	
 
 	FORCEINLINE void Setup(UMainMenu* Parent, uint32 Index)

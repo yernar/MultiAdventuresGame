@@ -100,14 +100,15 @@ private:
 
 	UServerRow* ServerRowWidget;
 
-	static TEnumAsByte<EGameMode> SelectedGameMode;
+	TEnumAsByte<EGameMode> SelectedGameMode;
 
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* Interface) { MenuInterface = Interface; }
 	FORCEINLINE IMenuInterface* GetMenuInterface() { return MenuInterface; }
-	FORCEINLINE uint32 GetSelectedIndex() { return (SelectedIndex.IsSet() ? SelectedIndex.GetValue() : UnselectedIndex); }
+	FORCEINLINE uint32 GetSelectedIndex() { return SelectedIndex.Get(UnselectedIndex); }
+	FORCEINLINE void DeselectIndex() { SelectedIndex.Reset(); }
 	FORCEINLINE void SelectIndex(uint32 Index) { SelectedIndex = Index; }
-	FORCEINLINE static EGameMode GetSelectedGameMode() { return SelectedGameMode; }
+	FORCEINLINE EGameMode GetSelectedGameMode() { return SelectedGameMode; }
 
 private:
 	UFUNCTION()

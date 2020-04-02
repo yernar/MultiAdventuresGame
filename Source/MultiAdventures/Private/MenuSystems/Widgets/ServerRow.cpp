@@ -33,7 +33,6 @@ const FString& UServerRow::GetServerText() const
 
 void UServerRow::SetHostingUserText(const FString& Text)
 {
-	// TODO: Refactor reusable function which accepts ENUM
 	GetHostingUser()->SetText(FText::FromString(Text));
 }
 
@@ -50,6 +49,16 @@ void UServerRow::SetNumPlayersText(const FString& Text)
 const FString& UServerRow::GetNumPlayersText() const
 {
 	return GetNumPlayers()->GetText().ToString();
+}
+
+void UServerRow::SetModeNameText(const FString& Text)
+{
+	GetModeName()->SetText(FText::FromString(Text));
+}
+
+const FString& UServerRow::GetModeNameText() const
+{
+	return GetModeName()->GetText().ToString();
 }
 
 void UServerRow::OnSelected()
@@ -90,6 +99,7 @@ void UServerRow::UpdateTextColor(const FLinearColor& Color)
 	ServerName->SetColorAndOpacity(FSlateColor(Color));
 	NumPlayers->SetColorAndOpacity(FSlateColor(Color));
 	HostingUser->SetColorAndOpacity(FSlateColor(Color));
+	ModeName->SetColorAndOpacity(FSlateColor(Color));
 }
 
 void UServerRow::SetTextDefaultColor()
@@ -97,4 +107,5 @@ void UServerRow::SetTextDefaultColor()
 	ServerName->SetColorAndOpacity(FSlateColor(DefaultTextColor));
 	NumPlayers->SetColorAndOpacity(FSlateColor(DefaultTextColor));
 	HostingUser->SetColorAndOpacity(FSlateColor(DefaultTextColor));
+	ModeName->SetColorAndOpacity(FSlateColor(DefaultTextColor));
 }

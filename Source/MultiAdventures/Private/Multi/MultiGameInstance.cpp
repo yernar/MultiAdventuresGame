@@ -102,7 +102,7 @@ void UMultiGameInstance::HostGame(const FString& HostName)
 		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
-		// SessionSettings.
+		SessionSettings.NumPrivateConnections = MainMenuWidget->GetSelectedGameMode(); // used for game mode
 		SessionSettings.Set(SESSION_HOST_NAME_KEY, HostName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);					
@@ -174,7 +174,8 @@ void UMultiGameInstance::OnFindSessionsComplete(bool bSuccess)
 			ServerProperty.MaxPlayers = SearchResult.Session.SessionSettings.NumPublicConnections;
 			ServerProperty.CurrentPlayers = ServerProperty.MaxPlayers - SearchResult.Session.NumOpenPublicConnections;			
 			ServerProperty.HostedUsername = SearchResult.Session.OwningUserName;
-			// ServerProperty.GameMode = 
+			// UE_LOG(LogTemp, Warning, TEXT("GameModeah: %d"), SearchResult.Session.SessionSettings.NumPrivateConnections)
+			ServerProperty.GameMode = EGameMode(SearchResult.Session.SessionSettings.NumPrivateConnections);
 			ServerProperties.Add(ServerProperty);
 		}
 		MainMenuWidget->AddServersToServerList(ServerProperties);	
