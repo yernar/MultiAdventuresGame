@@ -16,6 +16,9 @@
 #include "Materials/Material.h"
 #include "GameFramework/Controller.h"
 
+#include "MultiGameInstance.h"
+#include "GameMenu.h"
+
 #ifndef HMD_MODULE_INCLUDED
 #define HMD_MODULE_INCLUDED 0
 #endif
@@ -139,6 +142,9 @@ void ATP_VehiclePawn::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 	PlayerInputComponent->BindAction("SwitchCamera", IE_Pressed, this, &ATP_VehiclePawn::OnToggleCamera);
 
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATP_VehiclePawn::OnResetVR); 
+
+	// Calling game menu
+	PlayerInputComponent->BindAction("CallGameMenu", IE_Pressed, this, &ATP_VehiclePawn::CallGameMenu);
 }
 
 void ATP_VehiclePawn::MoveForward(float Val)
@@ -231,6 +237,14 @@ void ATP_VehiclePawn::BeginPlay()
 	bEnableInCar = UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled();
 #endif // HMD_MODULE_INCLUDED
 	EnableIncarView(bEnableInCar,true);
+}
+
+void ATP_VehiclePawn::CallGameMenu()
+{
+	(bGameMenuOnScreen
+		? Cast<UMultiGameInstance>(GetGameInstance())->GetGameMenuWidget()->TeardownGameMenu()
+		: Cast<UMultiGameInstance>(GetGameInstance())->LoadGameMenu());
+	bGameMenuOnScreen = !bGameMenuOnScreen;
 }
 
 void ATP_VehiclePawn::OnResetVR()

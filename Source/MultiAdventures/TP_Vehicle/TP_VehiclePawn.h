@@ -79,6 +79,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	/** Calling Game Menu */
+	void CallGameMenu();
+
 public:
 	// End Actor interface
 
@@ -118,6 +121,7 @@ private:
 	/* Are we on a 'slippery' surface */
 	bool bIsLowFriction;
 
+	bool bGameMenuOnScreen = false;
 
 public:
 	/** Returns SpringArm subobject **/
