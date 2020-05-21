@@ -152,7 +152,7 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 
 	}	
 
-	if (Role == ROLE_AutonomousProxy)
+	if (GetRemoteRole() == ROLE_AutonomousProxy)
 	{
 		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
 		SimulateMove(Move);
@@ -162,16 +162,14 @@ void ASpeedyVehicle::Tick(float DeltaTime)
 	}
 
 	// if we are the server and controlling the pawn
-	if (Role == ROLE_Authority && GetRemoteRole() == ENetRole::ROLE_SimulatedProxy)
+	if (GetRemoteRole() == ROLE_Authority && GetRemoteRole() == ENetRole::ROLE_SimulatedProxy)
 	{
 		FVehicleMove Move(Throttle, SteeringThrow, DeltaTime, GetWorld()->TimeSeconds); // TODO: set normal time
 		Server_SendMove(Move);
 	}
 
-	if (ENetRole::ROLE_SimulatedProxy == Role)
-	{
+	if (ENetRole::ROLE_SimulatedProxy == GetRemoteRole())
 		SimulateMove(ServerState.LastMove);
-	}
 }
 
 // Called to bind functionality to input
