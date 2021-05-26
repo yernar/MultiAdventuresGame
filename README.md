@@ -2,6 +2,7 @@
 A Steam based multiplayer game/plugin on/for Unreal Engine 4.
 
 # Features
+* Steam support;
 * Contains 2 mini games for demonstrating networking;
 * Lobby;
 * Hosting a game;
